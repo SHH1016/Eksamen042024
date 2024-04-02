@@ -1,25 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokemons</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        let allPokemon;
+      let allPokemon;
 
-        async function getAllPokemonType(){
-            const allPokemonRequest = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=50&offset=50");
+      /*async function getAllPokemon() {
+            const allPokemonRequest = await fetch(
+              "https://pokeapi.co/api/v2/pokemon/?limit=50"
+            );
 
-            let result = await allPokemonRequest.json();
-            return result;
-            console.log(result);
-        }
+            let allPokemon = await allPokemonRequest.json();
+            return allPokemon;
 
-        console.log(getAllPokemonType());
+            allPokemon.results.forEach(function (pokemon) {
+              fetchPokemonData(pokemon);
+            });
+            console.log(allPokemon);
+          }*/
 
+      //console.log(getAllPokemon());
+      async function getAllPokemon() {
+        fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
+          .then((response) => response.json())
+          .then(function (allpokemon) {
+            allpokemon.results.forEach(function (pokemon) {
+              fetchPokemonData(pokemon);
+            });
+          });
+          
+      }
+      getAllPokemon();
+
+      async function fetchPokemonData(pokemon) {
+        let url = pokemon.url;
+        fetch(url)
+          .then((response) => response.json())
+          .then(function (pokeData) {
+            console.log(pokeData, "inne i fetchPokemonData");
+          });
+      }
+
+      /*async function fetchPokemonData(pokemon) {
+
+            try{
+            let url = pokemon.url;
+
+            let pokemonData = await fetch(url);
+
+            let pokemonDataResult = await pokemonData.json();
+            return pokemonDataResult;
+
+            console.log(pokemonDataResult, "inne i fetchPokemonData");
+
+            }catch(error){
+                console.error("Klarte ikke hente inn pokemon data", error);
+
+            }
+
+          }*/
+
+      //console.log(fetchPokemonData(pokemonDataResult));
+
+      /* async function fetchAndShowPokemon(){
+                try{
+                    allPokemon = await getAllPokemon();
+
+                    showAllPokemon();
+                }catch (error){
+                    console.error("klarte ikke å laste inn allPokemon", error);
+                }
+            }*/
+      /* function showAllPokemon(){
+
+            }*/
     </script>
-</body>
+  </body>
 </html>
