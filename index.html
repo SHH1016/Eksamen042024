@@ -7,18 +7,21 @@
     <title>Pokemons</title>
   </head>
   <body>
+    <div id="pokemon-container"></div>
     <script>
       let allPokemon;
-    
+
       //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
       async function getAllPokemon() {
         try {
           fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
             .then((response) => response.json())
-            .then(function (allpokemon) {
-              allpokemon.results.forEach(function (pokemon) {
+            .then(function (allPokemon) {
+              allPokemon.results.forEach(function (pokemon) {
                 fetchPokemonData(pokemon);
+                
               });
+             
             });
         } catch (error) {
           console.error("Klarte inne å fetche respons fra api", error);
@@ -33,13 +36,38 @@
             .then((response) => response.json())
             .then(function (pokeData) {
               console.log(pokeData, "inne i fetchPokemonData");
+              displayAllPokemon(pokeData)
             });
         } catch (error) {
           console.error("Klarte ikke hente data fra url", error);
         }
       }
 
-      
+      function displayAllPokemon(pokemon) {
+        const pokemonContainer = document.querySelector("#pokemon-container");
+        //pokemonContainer.innerHTML = "";
+
+        
+          const pokemonCard = document.createElement("div");
+          pokemonCard.classList.add("pokemon-card");
+
+          const pokemonName = document.createElement("p");
+          pokemonName.classList.add("pokemon-name");
+          pokemonName.innerHTML = `Navn: ${pokemon.name}`;
+
+          const pokemonImage = document.createElement("img");
+          pokemonImage.classList.add("pokemon-image");
+          pokemonImage.src = pokemon.sprites.front_default;
+
+          const pokemonType = document.createElement("p");
+          pokemonType.classList.add("pokemon-type");
+          pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`
+
+          pokemonCard.append(pokemonImage, pokemonName, pokemonType);
+          pokemonContainer.appendChild(pokemonCard);
+          
+        
+      }
     </script>
   </body>
 </html>
