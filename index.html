@@ -7,6 +7,19 @@
     <title>Pokemons</title>
 </head>
 <body>
-    
+    <script>
+        let pokemonType;
+
+        async function getAllPokemonType(){
+            const allPokemonRequest = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=50&offset=50");
+
+            let result = await allPokemonRequest.json();
+            return result;
+            console.log(result);
+        }
+
+        console.log(getAllPokemonType());
+
+    </script>
 </body>
 </html>
