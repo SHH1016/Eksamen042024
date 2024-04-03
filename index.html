@@ -10,10 +10,12 @@
     <div id="pokemon-container"></div>
     <div id="pokemon-saved-container">Dine lagrede pokemon</div>
     <script>
-      let allPokemon;
+      let pokemonData;
 
       let savedPokemons = [];
 
+      
+        /*
       //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
       async function fetchAllPokemon() {
         try {
@@ -24,6 +26,7 @@
                 fetchPokemonData(pokemon);
                 
               });
+            
               
             });
         } catch (error) {
@@ -44,14 +47,33 @@
         } catch (error) {
           console.error("Klarte ikke hente data fra url", error);
         }
+      }*/
+      async function fetchAllPokemon (){
+        try{
+            const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
+            const data = await response.json();
+
+            const pokemons = data.results.map(async function(pokemon){
+                const response = await fetch(pokemon.url);
+                return response.json();
+            })
+            const pokemonData = await Promise.all(pokemons);
+            console.log(pokemonData);
+            displayAllPokemon(pokemonData);
+
+        }catch (error){
+            console.error("Klarte ikke hente respons fra API",error);
+        }
       }
+      fetchAllPokemon();
       
       
-      function displayAllPokemon(pokemon) {
+      async function displayAllPokemon(pokemonData) {
         const pokemonContainer = document.querySelector("#pokemon-container");
         //pokemonContainer.innerHTML = "";
-        
-        const pokemonCard = document.createElement("div");
+        pokemonData.forEach(async function(pokemon){
+            
+            const pokemonCard = document.createElement("div");
         pokemonCard.classList.add("pokemon-card");
 
         const pokemonName = document.createElement("p");
@@ -93,6 +115,10 @@
           deleteBtn
         );
         pokemonContainer.appendChild(pokemonCard);
+        })
+       
+
+       
       }
       function displaySavedPokemon(pokemon){
         const savedPokemonsContainer = document.querySelector("#pokemon-saved-container");
@@ -183,7 +209,21 @@
       //slette pokemon
       async function deletePokemon(pokemon) {
         try {
-        } catch {}
+            
+            let savedPokemons = JSON.parse(localStorage.getItem("savedPokemons")) || [];
+            const index = savedPokemons.findIndex(savedPokemons => savedPokemons.name === pokemon.name);
+            allPokemon.splice(index,1);
+            savedPokemons.splice(index,1);
+            localStorage.setItem(
+              "savedPokemons",
+              JSON.stringify(savedPokemons)
+            );
+            //displaySavedPokemon(pokemon);
+            
+
+        } catch (error){
+            console.error("klarte ikke å slette pokemon fra array eller localstorage",error);
+        }
       }
     </script>
   </body>
