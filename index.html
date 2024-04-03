@@ -11,6 +11,8 @@
     <script>
       let allPokemon;
 
+      let savedPokemons = [];
+
       //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
       async function getAllPokemon() {
         try {
@@ -63,11 +65,28 @@
           pokemonType.classList.add("pokemon-type");
           pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`
 
-          pokemonCard.append(pokemonImage, pokemonName, pokemonType);
+          //Button funskjoner
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerHTML = "Slett Pokemon";
+
+          const saveBtn = document.createElement("button");
+          saveBtn.innerHTML = "Lagre Pokemon";
+
+          const editBtn = document.createElement("button");
+          editBtn.innerHTML = "Rediger Pokemon";
+
+         deleteBtn.addEventListener("click", function(){deletePokemon(pokemon)});
+         saveBtn.addEventListener("click", function(){savePokemon(pokemon)});
+         editBtn.addEventListener("click", function(){editPokemon(pokemon)});
+
+          
+
+          pokemonCard.append(pokemonImage, pokemonName, pokemonType, saveBtn, editBtn, deleteBtn);
           pokemonContainer.appendChild(pokemonCard);
           
         
       }
+      
     </script>
   </body>
 </html>
