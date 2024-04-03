@@ -14,22 +14,23 @@
 
       let savedPokemons = [];
 
-
       //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
-      async function getAllPokemon() {
+      async function fetchAllPokemon() {
         try {
           fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
             .then((response) => response.json())
             .then(function (allPokemon) {
               allPokemon.results.forEach(function (pokemon) {
                 fetchPokemonData(pokemon);
+                
               });
+              
             });
         } catch (error) {
           console.error("Klarte inne å fetche respons fra api", error);
         }
       }
-      getAllPokemon();
+      fetchAllPokemon();
 
       async function fetchPokemonData(pokemon) {
         try {
@@ -45,11 +46,11 @@
         }
       }
       
-      /*
+      
       function displayAllPokemon(pokemon) {
         const pokemonContainer = document.querySelector("#pokemon-container");
         //pokemonContainer.innerHTML = "";
-
+        
         const pokemonCard = document.createElement("div");
         pokemonCard.classList.add("pokemon-card");
 
@@ -168,20 +169,22 @@
           console.error("Klarte ikke å lagre pokemon til localstorage", error);
         }
       }
+      
       async function savedOnDisplay(){
         try{
             let savedPokemons = JSON.parse(localStorage.getItem("savedPokemons")) || [];
-            savedPokemon.forEach(pokemon => displaySavedPokemon(pokemon))
+            savedPokemons.forEach(pokemon => displaySavedPokemon(pokemon))
         }catch (error){
             console.error("Klarte ikke laste inn dine lagrede pokemon",error);
         }
       }
+     window.onload = savedOnDisplay;
       
       //slette pokemon
       async function deletePokemon(pokemon) {
         try {
         } catch {}
-      }*/
+      }
     </script>
   </body>
 </html>
