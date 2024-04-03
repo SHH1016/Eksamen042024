@@ -8,10 +8,12 @@
   </head>
   <body>
     <div id="pokemon-container"></div>
+    <div id="pokemon-saved-container"></div>
     <script>
       let allPokemon;
 
       let savedPokemons = [];
+
 
       //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
       async function getAllPokemon() {
@@ -90,18 +92,29 @@
         );
         pokemonContainer.appendChild(pokemonCard);
       }
+      function displaySavedPokemon(pokemon){
+        const savedPokemons = document.querySelector("#pokemon-saved-container");
+      }
       //lagre pokemon
       async function savePokemon(pokemon) {
         try {
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
 
-          if (savedPokemons) {
+          maxLimitPokemon = savedPokemons.length + 1;
+
+          if (maxLimitPokemon <= 5) {
             savedPokemons.push(pokemon);
 
             localStorage.setItem(
               "savedPokemons",
               JSON.stringify(savedPokemons)
+            );
+            displaySavedPokemon(pokemon);
+            
+          } else if (maxLimitPokemon >= 5) {
+            alert(
+              "Du har nådd maksgrensen på storage, slett en lagret pokemon"
             );
           }
         } catch (error) {
@@ -109,12 +122,9 @@
         }
       }
       //slette pokemon
-      async function deletePokemon(pokemon){
-        try{
-
-        }catch{
-            
-        }
+      async function deletePokemon(pokemon) {
+        try {
+        } catch {}
       }
     </script>
   </body>
