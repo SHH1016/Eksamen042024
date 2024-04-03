@@ -21,9 +21,7 @@
             .then(function (allPokemon) {
               allPokemon.results.forEach(function (pokemon) {
                 fetchPokemonData(pokemon);
-                
               });
-             
             });
         } catch (error) {
           console.error("Klarte inne å fetche respons fra api", error);
@@ -38,7 +36,7 @@
             .then((response) => response.json())
             .then(function (pokeData) {
               console.log(pokeData, "inne i fetchPokemonData");
-              displayAllPokemon(pokeData)
+              displayAllPokemon(pokeData);
             });
         } catch (error) {
           console.error("Klarte ikke hente data fra url", error);
@@ -49,44 +47,75 @@
         const pokemonContainer = document.querySelector("#pokemon-container");
         //pokemonContainer.innerHTML = "";
 
-        
-          const pokemonCard = document.createElement("div");
-          pokemonCard.classList.add("pokemon-card");
+        const pokemonCard = document.createElement("div");
+        pokemonCard.classList.add("pokemon-card");
 
-          const pokemonName = document.createElement("p");
-          pokemonName.classList.add("pokemon-name");
-          pokemonName.innerHTML = `Navn: ${pokemon.name}`;
+        const pokemonName = document.createElement("p");
+        pokemonName.classList.add("pokemon-name");
+        pokemonName.innerHTML = `Navn: ${pokemon.name}`;
 
-          const pokemonImage = document.createElement("img");
-          pokemonImage.classList.add("pokemon-image");
-          pokemonImage.src = pokemon.sprites.front_default;
+        const pokemonImage = document.createElement("img");
+        pokemonImage.classList.add("pokemon-image");
+        pokemonImage.src = pokemon.sprites.front_default;
 
-          const pokemonType = document.createElement("p");
-          pokemonType.classList.add("pokemon-type");
-          pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`
+        const pokemonType = document.createElement("p");
+        pokemonType.classList.add("pokemon-type");
+        pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`;
 
-          //Button funskjoner
-          const deleteBtn = document.createElement("button");
-          deleteBtn.innerHTML = "Slett Pokemon";
+        //Button funskjoner
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Slett Pokemon";
 
-          const saveBtn = document.createElement("button");
-          saveBtn.innerHTML = "Lagre Pokemon";
+        const saveBtn = document.createElement("button");
+        saveBtn.innerHTML = "Lagre Pokemon";
 
-          const editBtn = document.createElement("button");
-          editBtn.innerHTML = "Rediger Pokemon";
+        const editBtn = document.createElement("button");
+        editBtn.innerHTML = "Rediger Pokemon";
 
-         deleteBtn.addEventListener("click", function(){deletePokemon(pokemon)});
-         saveBtn.addEventListener("click", function(){savePokemon(pokemon)});
-         editBtn.addEventListener("click", function(){editPokemon(pokemon)});
+        deleteBtn.addEventListener("click", function () {
+          deletePokemon(pokemon);
+        });
+        saveBtn.addEventListener("click", () => savePokemon(pokemon));
+        editBtn.addEventListener("click", function () {
+          editPokemon(pokemon);
+        });
 
-          
-
-          pokemonCard.append(pokemonImage, pokemonName, pokemonType, saveBtn, editBtn, deleteBtn);
-          pokemonContainer.appendChild(pokemonCard);
-          
-        
+        pokemonCard.append(
+          pokemonImage,
+          pokemonName,
+          pokemonType,
+          saveBtn,
+          editBtn,
+          deleteBtn
+        );
+        pokemonContainer.appendChild(pokemonCard);
       }
-      
+      //lagre pokemon
+      async function savePokemon(pokemon) {
+        try {
+          let savedPokemons =
+            JSON.parse(localStorage.getItem("savedPokemons")) || [];
+
+          if (savedPokemons) {
+            savedPokemons.push(pokemon);
+
+            localStorage.setItem(
+              "savedPokemons",
+              JSON.stringify(savedPokemons)
+            );
+          }
+        } catch (error) {
+          console.error("Klarte ikke å lagre pokemon til localstorage", error);
+        }
+      }
+      //slette pokemon
+      async function deletePokemon(pokemon){
+        try{
+
+        }catch{
+            
+        }
+      }
     </script>
   </body>
 </html>
