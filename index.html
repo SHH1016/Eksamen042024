@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="pokemon-container"></div>
-    <div id="pokemon-saved-container"></div>
+    <div id="pokemon-saved-container">Dine lagrede pokemon</div>
     <script>
       let allPokemon;
 
@@ -44,7 +44,8 @@
           console.error("Klarte ikke hente data fra url", error);
         }
       }
-
+      
+      /*
       function displayAllPokemon(pokemon) {
         const pokemonContainer = document.querySelector("#pokemon-container");
         //pokemonContainer.innerHTML = "";
@@ -93,14 +94,59 @@
         pokemonContainer.appendChild(pokemonCard);
       }
       function displaySavedPokemon(pokemon){
-        const savedPokemons = document.querySelector("#pokemon-saved-container");
+        const savedPokemonsContainer = document.querySelector("#pokemon-saved-container");
+
+        const pokemonCard = document.createElement("div");
+        pokemonCard.classList.add("pokemon-card");
+
+        const pokemonName = document.createElement("p");
+        pokemonName.classList.add("pokemon-name");
+        pokemonName.innerHTML = `Navn: ${pokemon.name}`;
+
+        const pokemonImage = document.createElement("img");
+        pokemonImage.classList.add("pokemon-image");
+        pokemonImage.src = pokemon.sprites.front_default;
+
+        const pokemonType = document.createElement("p");
+        pokemonType.classList.add("pokemon-type");
+        pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`;
+
+        //Button funskjoner
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Slett Pokemon";
+
+        const saveBtn = document.createElement("button");
+        saveBtn.innerHTML = "Lagre Pokemon";
+
+        const editBtn = document.createElement("button");
+        editBtn.innerHTML = "Rediger Pokemon";
+
+        deleteBtn.addEventListener("click", function () {
+          deletePokemon(pokemon);
+        });
+        saveBtn.addEventListener("click", () => savePokemon(pokemon));
+        editBtn.addEventListener("click", function () {
+          editPokemon(pokemon);
+        });
+
+        pokemonCard.append(
+          pokemonImage,
+          pokemonName,
+          pokemonType,
+          saveBtn,
+          editBtn,
+          deleteBtn
+        );
+        savedPokemonsContainer.appendChild(pokemonCard);
       }
+     // displaySavedPokemon(pokemon);
+      
       //lagre pokemon
       async function savePokemon(pokemon) {
         try {
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
-
+            //savedOnDisplay(pokemon);
           maxLimitPokemon = savedPokemons.length + 1;
 
           if (maxLimitPokemon <= 5) {
@@ -111,6 +157,7 @@
               JSON.stringify(savedPokemons)
             );
             displaySavedPokemon(pokemon);
+           // savedOnDisplay(pokemon);
             
           } else if (maxLimitPokemon >= 5) {
             alert(
@@ -121,11 +168,20 @@
           console.error("Klarte ikke å lagre pokemon til localstorage", error);
         }
       }
+      async function savedOnDisplay(){
+        try{
+            let savedPokemons = JSON.parse(localStorage.getItem("savedPokemons")) || [];
+            savedPokemon.forEach(pokemon => displaySavedPokemon(pokemon))
+        }catch (error){
+            console.error("Klarte ikke laste inn dine lagrede pokemon",error);
+        }
+      }
+      
       //slette pokemon
       async function deletePokemon(pokemon) {
         try {
         } catch {}
-      }
+      }*/
     </script>
   </body>
 </html>
