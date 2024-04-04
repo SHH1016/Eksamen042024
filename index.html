@@ -8,45 +8,13 @@
   </head>
   <body>
     <div id="pokemon-container"></div>
-    <div id="pokemon-saved-container">Dine lagrede pokemon</div>
+    <h1>Dine lagrede Pokemons</h1>
+    <div id="pokemon-saved-container"></div>
     <script>
       let pokemonData;
 
-      let savedPokemons = [];
+      savedPokemons = [];
 
-      /*
-      //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
-      async function fetchAllPokemon() {
-        try {
-          fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
-            .then((response) => response.json())
-            .then(function (allPokemon) {
-              allPokemon.results.forEach(function (pokemon) {
-                fetchPokemonData(pokemon);
-                
-              });
-            
-              
-            });
-        } catch (error) {
-          console.error("Klarte inne å fetche respons fra api", error);
-        }
-      }
-      fetchAllPokemon();
-
-      async function fetchPokemonData(pokemon) {
-        try {
-          let url = pokemon.url;
-          fetch(url)
-            .then((response) => response.json())
-            .then(function (pokeData) {
-              console.log(pokeData, "inne i fetchPokemonData");
-              displayAllPokemon(pokeData);
-            });
-        } catch (error) {
-          console.error("Klarte ikke hente data fra url", error);
-        }
-      }*/
       async function fetchAllPokemon() {
         try {
           const response = await fetch(
@@ -58,7 +26,7 @@
             const response = await fetch(pokemon.url);
             return response.json();
           });
-          const pokemonData = await Promise.all(pokemons);
+          pokemonData = await Promise.all(pokemons);
           console.log(pokemonData);
           displayAllPokemon(pokemonData);
         } catch (error) {
@@ -69,8 +37,8 @@
 
       async function displayAllPokemon(pokemonData) {
         const pokemonContainer = document.querySelector("#pokemon-container");
-        //pokemonContainer.innerHTML = "";
-        pokemonData.forEach(async function (pokemon, index) {
+        pokemonContainer.innerHTML = "";
+        pokemonData.forEach(async function (pokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
 
@@ -97,7 +65,7 @@
           editBtn.innerHTML = "Rediger Pokemon";
 
           deleteBtn.addEventListener("click", function () {
-            deletePokemon(index);
+            deletePokemon(pokemon);
           });
           saveBtn.addEventListener("click", () => savePokemon(pokemon));
           editBtn.addEventListener("click", function () {
@@ -115,73 +83,84 @@
           pokemonContainer.appendChild(pokemonCard);
         });
       }
-      function displaySavedPokemon(pokemon) {
-        const savedPokemonsContainer = document.querySelector(
-          "#pokemon-saved-container"
-        );
-        let savedPokemons =
-          JSON.parse(localStorage.getItem("savedPokemons")) || [];
-
-        savedPokemons.forEach((pokemon, index) => {
-          const pokemonCard = document.createElement("div");
-          pokemonCard.classList.add("pokemon-card");
-
-          const pokemonName = document.createElement("p");
-          pokemonName.classList.add("pokemon-name");
-          pokemonName.innerHTML = `Navn: ${pokemon.name}`;
-
-          const pokemonImage = document.createElement("img");
-          pokemonImage.classList.add("pokemon-image");
-          pokemonImage.src = pokemon.sprites.front_default;
-
-          const pokemonType = document.createElement("p");
-          pokemonType.classList.add("pokemon-type");
-          pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`;
-
-          //Button funskjoner
-          const deleteBtn = document.createElement("button");
-          deleteBtn.innerHTML = "Slett Pokemon";
-
-          const saveBtn = document.createElement("button");
-          saveBtn.innerHTML = "Lagre Pokemon";
-
-          const editBtn = document.createElement("button");
-          editBtn.innerHTML = "Rediger Pokemon";
-
-          deleteBtn.addEventListener("click", function () {
-            deletePokemon(pokemon, index);
-          });
-
-          editBtn.addEventListener("click", function () {
-            editPokemon(pokemon);
-          });
-
-          pokemonCard.append(
-            pokemonImage,
-            pokemonName,
-            pokemonType,
-            editBtn,
-            deleteBtn
+      //lagrede pokemon display
+      async function displaySavedPokemon() {
+        try {
+          const savedPokemonsContainer = document.querySelector(
+            "#pokemon-saved-container"
           );
-          savedPokemonsContainer.appendChild(pokemonCard);
-        });
-      }
+          savedPokemonsContainer.innerHTML = "";
+          let savedPokemons =
+            JSON.parse(localStorage.getItem("savedPokemons")) || [];
+          maxLimitPokemon = savedPokemons.length;
 
+          savedPokemons.forEach((pokemon) => {
+            const pokemonCard = document.createElement("div");
+            pokemonCard.classList.add("pokemon-card");
+
+            const pokemonName = document.createElement("p");
+            pokemonName.classList.add("pokemon-name");
+            pokemonName.innerHTML = `Navn: ${pokemon.name}`;
+
+            const pokemonImage = document.createElement("img");
+            pokemonImage.classList.add("pokemon-image");
+            pokemonImage.src = pokemon.sprites.front_default;
+
+            const pokemonType = document.createElement("p");
+            pokemonType.classList.add("pokemon-type");
+            pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`;
+
+            //Button funskjoner
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerHTML = "Slett Pokemon";
+
+            const saveBtn = document.createElement("button");
+            saveBtn.innerHTML = "Lagre Pokemon";
+
+            const editBtn = document.createElement("button");
+            editBtn.innerHTML = "Rediger Pokemon";
+
+            deleteBtn.addEventListener("click", function () {
+              deletePokemon(pokemon);
+            });
+
+            editBtn.addEventListener("click", function () {
+              editPokemon(pokemon);
+            });
+
+            pokemonCard.append(
+              pokemonImage,
+              pokemonName,
+              pokemonType,
+              editBtn,
+              deleteBtn
+            );
+            savedPokemonsContainer.appendChild(pokemonCard);
+          });
+        } catch (error) {
+          console.error("Klarte ikke laste inn lagrede pokemon");
+        }
+      }
+      displaySavedPokemon();
       //lagre pokemon
       async function savePokemon(pokemon) {
         try {
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
-          maxLimitPokemon = savedPokemons.length + 1;
+          maxLimitPokemon = savedPokemons.length;
 
-          if (maxLimitPokemon <= 5) {
+          const checkPokemon = savedPokemons.some(
+            (poke) => poke.name === pokemon.name
+          );
+
+          if (maxLimitPokemon <= 5 && !checkPokemon) {
             savedPokemons.push(pokemon);
 
             localStorage.setItem(
               "savedPokemons",
               JSON.stringify(savedPokemons)
             );
-            displaySavedPokemon(pokemon);
+            displaySavedPokemon();
           } else if (maxLimitPokemon >= 5) {
             alert(
               "Du har nådd maksgrensen på storage, slett en lagret pokemon"
@@ -192,31 +171,28 @@
         }
       }
 
-      async function savedOnDisplay() {
-        try {
-          let savedPokemons =
-            JSON.parse(localStorage.getItem("savedPokemons")) || [];
-          savedPokemons.forEach((pokemon) => displaySavedPokemon(pokemon));
-        } catch (error) {
-          console.error("Klarte ikke laste inn dine lagrede pokemon", error);
-        }
-      }
-      window.onload = savedOnDisplay;
-
       //slette pokemon
-      async function deletePokemon(index) {
+      async function deletePokemon(pokemonDelete) {
         try {
-          pokemonData.splice(index, 1);
-
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
-          /*const index = savedPokemons.findIndex(
-            (savedPokemons) => savedPokemons.name === pokemon.name
-          );*/
 
-          savedPokemons.splice(index, 1);
+          savedPokemons = savedPokemons.filter(
+            (pokeSaved) => pokeSaved.name !== pokemonDelete.name
+          );
           localStorage.setItem("savedPokemons", JSON.stringify(savedPokemons));
-          //displaySavedPokemon(pokemon);
+
+         
+            const index = pokemonData.findIndex(
+              (poke) => poke.name === pokemonDelete.name
+            );
+            if (index !== -1) {
+              pokemonData.splice(pokemonDelete, 1);
+            }
+          
+
+          displaySavedPokemon();
+          displayAllPokemon(pokemonData);
         } catch (error) {
           console.error(
             "klarte ikke å slette pokemon fra array eller localstorage",
