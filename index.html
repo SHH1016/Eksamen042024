@@ -65,7 +65,7 @@
           editBtn.innerHTML = "Rediger Pokemon";
 
           deleteBtn.addEventListener("click", function () {
-            deletePokemon(pokemon);
+            deleteSavedPokemon(pokemon);
           });
           saveBtn.addEventListener("click", () => savePokemon(pokemon));
           editBtn.addEventListener("click", function () {
@@ -121,7 +121,7 @@
             editBtn.innerHTML = "Rediger Pokemon";
 
             deleteBtn.addEventListener("click", function () {
-              deletePokemon(pokemon);
+              deleteSavedPokemon(pokemon);
             });
 
             editBtn.addEventListener("click", function () {
@@ -172,7 +172,7 @@
       }
 
       //slette pokemon
-      async function deletePokemon(pokemonDelete) {
+      async function deleteSavedPokemon(pokemonDelete) {
         try {
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
@@ -182,17 +182,19 @@
           );
           localStorage.setItem("savedPokemons", JSON.stringify(savedPokemons));
 
-         
+          if (savedPokemons) {
             const index = pokemonData.findIndex(
               (poke) => poke.name === pokemonDelete.name
             );
             if (index !== -1) {
-              pokemonData.splice(pokemonDelete, 1);
+              pokemonData = pokemonData.filter(
+                (poke) => poke.name !== pokemonDelete.name
+              );
             }
-          
+          }
 
-          displaySavedPokemon();
           displayAllPokemon(pokemonData);
+          displaySavedPokemon();
         } catch (error) {
           console.error(
             "klarte ikke å slette pokemon fra array eller localstorage",
