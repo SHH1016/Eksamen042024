@@ -54,7 +54,7 @@
           pokemonType.classList.add("pokemon-type");
           pokemonType.innerHTML = `Type: ${pokemon.types[0].type.name}`;
 
-          //Button funskjoner
+          //Button
           const deleteBtn = document.createElement("button");
           deleteBtn.innerHTML = "Slett Pokemon";
 
@@ -64,13 +64,12 @@
           const editBtn = document.createElement("button");
           editBtn.innerHTML = "Rediger Pokemon";
 
+          //funskjoner
           deleteBtn.addEventListener("click", function () {
-            deleteSavedPokemon(pokemon);
+            deletePokemon(pokemon);
           });
           saveBtn.addEventListener("click", () => savePokemon(pokemon));
-          editBtn.addEventListener("click", function () {
-            editPokemon(pokemon);
-          });
+          editBtn.addEventListener("click", () => editPokemon(pokemon));
 
           pokemonCard.append(
             pokemonImage,
@@ -117,22 +116,21 @@
             const saveBtn = document.createElement("button");
             saveBtn.innerHTML = "Lagre Pokemon";
 
-            const editBtn = document.createElement("button");
-            editBtn.innerHTML = "Rediger Pokemon";
+            // const editBtn = document.createElement("button");
+            //editBtn.innerHTML = "Rediger Pokemon";
 
             deleteBtn.addEventListener("click", function () {
-              deleteSavedPokemon(pokemon);
+              deletePokemon(pokemon);
             });
 
-            editBtn.addEventListener("click", function () {
-              editPokemon(pokemon);
-            });
+            // editBtn.addEventListener("click", function () {
+            // editPokemon(pokemon);
+            //});
 
             pokemonCard.append(
               pokemonImage,
               pokemonName,
               pokemonType,
-              editBtn,
               deleteBtn
             );
             savedPokemonsContainer.appendChild(pokemonCard);
@@ -142,7 +140,7 @@
         }
       }
       displaySavedPokemon();
-      //lagre pokemon
+
       async function savePokemon(pokemon) {
         try {
           let savedPokemons =
@@ -172,7 +170,7 @@
       }
 
       //slette pokemon
-      async function deleteSavedPokemon(pokemonDelete) {
+      async function deletePokemon(pokemonDelete) {
         try {
           let savedPokemons =
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
@@ -200,6 +198,30 @@
             "klarte ikke å slette pokemon fra array eller localstorage",
             error
           );
+        }
+      }
+      //redigere pokemon
+      async function editPokemon(index) {
+        try {
+            console.log(`index:`,index);
+          console.log(`pokemonData:`,pokemonData);
+         // console.log(`pokemonførendring:`,pokemonData[indexOfPokemon]);
+
+          const newPokeName = prompt("Gi et nytt Navn");
+          const newPokeType = prompt("Gi en ny Type");
+
+          let indexOfPokemon = pokemonData.findIndex((pokemon)=>pokemon.name === index.name);
+          console.log(`indexOfPokemon:`, indexOfPokemon);
+
+         if (newPokeName && newPokeType && indexOfPokemon !== -1) {
+            pokemonData[indexOfPokemon].name = newPokeName;
+            pokemonData[indexOfPokemon].types[0].type.name = newPokeType;
+          }
+          
+
+          displayAllPokemon(pokemonData);
+        } catch (error) {
+          console.error("Klarte ikke endre på navn og type", error);
         }
       }
     </script>
