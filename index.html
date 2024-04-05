@@ -19,7 +19,9 @@
       savedPokemons = [];
 
       const addNewName = document.querySelector("#pokemon-name");
+
       const addNewType = document.querySelector("#pokemon-type");
+
       const addNewPokemon = document.querySelector("#add-pokemon");
 
       async function fetchAllPokemon() {
@@ -233,25 +235,29 @@
         }
       }
       //Lag din egen pokemon
-
-      async function createNewPokemon(){
-        try{
-            const newPokemon = {
-                name: addNewName.value,
-                types:[{type:{name: addNewType.value}}],
-                sprites:{
-                    front_default: "Default for now"
-                }
-            };
-            pokemonData.unshift(newPokemon);
-            console.log(pokemonData);
-            displayAllPokemon(pokemonData);
-        }catch(error){
-            console.error("Klarte ikke legge til ny pokemon i pokemonData",error);
-
+      async function createNewPokemon() {
+       
+        try {
+          const newPokemon = {
+            name: addNewName.value,
+            types: [{ type: { name: addNewType.value } }],
+            sprites: {
+              front_default: "Default for now",
+            },
+          };
+          pokemonData.unshift(newPokemon);
+          console.log(pokemonData);
+          displayAllPokemon(pokemonData);
+        } catch (error) {
+          console.error(
+            "Klarte ikke legge til ny pokemon i pokemonData",
+            error
+          );
         }
+        addNewType.value = "";
+        addNewName.value = "";
       }
-      addNewPokemon.addEventListener("click",()=> createNewPokemon());
+      addNewPokemon.addEventListener("click", () => createNewPokemon());
     </script>
   </body>
 </html>
