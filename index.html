@@ -24,7 +24,8 @@
       const addNewType = document.querySelector("#pokemon-type");
 
       const addNewPokemon = document.querySelector("#add-pokemon");
-
+        //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
+        //Fulgte denne og måtte få hjlep av chatgpt til å formulere denne annerledes slik at jeg kan bruke en for each
       async function fetchAllPokemon() {
         try {
           const response = await fetch(
@@ -114,6 +115,7 @@
             const pokemonImage = document.createElement("img");
             pokemonImage.classList.add("pokemon-image");
             pokemonImage.src = pokemon.sprites.front_default;
+            pokemonImage.style.width = "150px"
 
             const pokemonType = document.createElement("p");
             pokemonType.classList.add("pokemon-type");
@@ -157,9 +159,11 @@
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
           maxLimitPokemon = savedPokemons.length;
 
+          //fikk denne løsningen av chatgpt for å sammenligne å sjekke om et element passerer testen i local om den finnes fra før.
           const checkPokemon = savedPokemons.some(
             (poke) => poke.name === pokemon.name
           );
+          //
 
           if (maxLimitPokemon <= 5 && !checkPokemon) {
             savedPokemons.push(pokemon);
@@ -194,11 +198,13 @@
             const index = pokemonData.findIndex(
               (poke) => poke.name === pokemonDelete.name
             );
+            //debugget i chatgpt og fikk opp å bruke en -1 for å sjekke om element er der eller ikke > returnerer -1 hvis elementet ikke finnes
             if (index !== -1) {
               pokemonData = pokemonData.filter(
                 (poke) => poke.name !== pokemonDelete.name
               );
             }
+            //
           }
 
           displayAllPokemon(pokemonData);
@@ -249,6 +255,11 @@
           pokemonData.unshift(newPokemon);
           console.log(pokemonData);
           displayAllPokemon(pokemonData);
+
+          if(newPokemon){
+            await savePokemon(newPokemon);
+
+          }
         } catch (error) {
           console.error(
             "Klarte ikke legge til ny pokemon i pokemonData",
@@ -257,6 +268,7 @@
         }
         addNewType.value = "";
         addNewName.value = "";
+
       }
       addNewPokemon.addEventListener("click", () => createNewPokemon());
     </script>
