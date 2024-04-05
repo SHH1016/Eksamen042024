@@ -236,18 +236,22 @@
 
       async function createNewPokemon(){
         try{
-            pokemonData.unshift({
-                //newPokemon: { name: addNewName.value, type: addNewType.value },
-            name: addNewName.value,
-            type:addNewType.value,
-            });
+            const newPokemon = {
+                name: addNewName.value,
+                types:[{type:{name: addNewType.value}}],
+                sprites:{
+                    front_default: "Default for now"
+                }
+            };
+            pokemonData.unshift(newPokemon);
             console.log(pokemonData);
+            displayAllPokemon(pokemonData);
         }catch(error){
             console.error("Klarte ikke legge til ny pokemon i pokemonData",error);
 
         }
       }
-      
+      addNewPokemon.addEventListener("click",()=> createNewPokemon());
     </script>
   </body>
 </html>
