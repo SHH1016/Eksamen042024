@@ -7,13 +7,20 @@
     <title>Pokemons</title>
   </head>
   <body>
+    <input type="text" placeholder="Pokemon navn" id="pokemon-name" />
+    <input type="text" placeholder="Pokemon type" id="pokemon-type" />
+    <input type="button" value="Legg til" id="add-pokemon" />
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
     <script>
-      let pokemonData;
+      let pokemonData = [];
 
       savedPokemons = [];
+
+      const addNewName = document.querySelector("#pokemon-name");
+      const addNewType = document.querySelector("#pokemon-type");
+      const addNewPokemon = document.querySelector("#add-pokemon");
 
       async function fetchAllPokemon() {
         try {
@@ -203,27 +210,44 @@
       //redigere pokemon
       async function editPokemon(index) {
         try {
-            console.log(`index:`,index);
-          console.log(`pokemonData:`,pokemonData);
-         // console.log(`pokemonførendring:`,pokemonData[indexOfPokemon]);
+          console.log(`index:`, index);
+          console.log(`pokemonData:`, pokemonData);
+          // console.log(`pokemonførendring:`,pokemonData[indexOfPokemon]);
 
           const newPokeName = prompt("Gi et nytt Navn");
           const newPokeType = prompt("Gi en ny Type");
 
-          let indexOfPokemon = pokemonData.findIndex((pokemon)=>pokemon.name === index.name);
+          let indexOfPokemon = pokemonData.findIndex(
+            (pokemon) => pokemon.name === index.name
+          );
           console.log(`indexOfPokemon:`, indexOfPokemon);
 
-         if (newPokeName && newPokeType && indexOfPokemon !== -1) {
+          if (newPokeName && newPokeType && indexOfPokemon !== -1) {
             pokemonData[indexOfPokemon].name = newPokeName;
             pokemonData[indexOfPokemon].types[0].type.name = newPokeType;
           }
-          
 
           displayAllPokemon(pokemonData);
         } catch (error) {
           console.error("Klarte ikke endre på navn og type", error);
         }
       }
+      //Lag din egen pokemon
+
+      async function createNewPokemon(){
+        try{
+            pokemonData.unshift({
+                //newPokemon: { name: addNewName.value, type: addNewType.value },
+            name: addNewName.value,
+            type:addNewType.value,
+            });
+            console.log(pokemonData);
+        }catch(error){
+            console.error("Klarte ikke legge til ny pokemon i pokemonData",error);
+
+        }
+      }
+      
     </script>
   </body>
 </html>
