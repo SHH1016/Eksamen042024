@@ -13,6 +13,7 @@
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
+   
     <script>
       let pokemonData = [];
 
@@ -242,7 +243,7 @@
             name: addNewName.value,
             types: [{ type: { name: addNewType.value } }],
             sprites: {
-              front_default: "Default for now",
+              front_default: "assets/pokemon-png-18174.png"
             },
           };
           pokemonData.unshift(newPokemon);
