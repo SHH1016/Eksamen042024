@@ -7,47 +7,50 @@
     <title>Pokemons</title>
   </head>
   <body>
-
     <input type="text" placeholder="Pokemon navn" id="pokemon-name" />
     <input type="text" placeholder="Pokemon type" id="pokemon-type" />
     <input type="button" value="Legg til" id="add-pokemon" />
     <select id="pokemon-type">
-        <option value="normal">normal</option>
-        <option value="fighting">fighting</option>
-        <option value="flying">flying</option>
-        <option value="poison">poison</option>
-        <option value="ground">ground</option>
-        <option value="rock">rock</option>
-        <option value="bug">bug</option>
-        <option value="ghost">ghost</option>
-        <option value="steel">steel</option>
-        <option value="fire">fire</option>
-        <option value="water">water</option>
-        <option value="grass">grass</option>
-        <option value="electric">electric</option>
-        <option value="psychic">psychic</option>
-        <option value="ice">ice</option>
-        <option value="dragon">dragon</option>
-        <option value="dark">dark</option>
-        <option value="fairy">fairy</option>
-        <option value="shadow">shadow</option>
+      <option value="normal">normal</option>
+      <option value="fighting">fighting</option>
+      <option value="flying">flying</option>
+      <option value="poison">poison</option>
+      <option value="ground">ground</option>
+      <option value="rock">rock</option>
+      <option value="bug">bug</option>
+      <option value="ghost">ghost</option>
+      <option value="steel">steel</option>
+      <option value="fire">fire</option>
+      <option value="water">water</option>
+      <option value="grass">grass</option>
+      <option value="electric">electric</option>
+      <option value="psychic">psychic</option>
+      <option value="ice">ice</option>
+      <option value="dragon">dragon</option>
+      <option value="dark">dark</option>
+      <option value="fairy">fairy</option>
+      <option value="shadow">shadow</option>
     </select>
+    <button id="show-type">OK</button>
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
-   
+
     <script>
       let pokemonData = [];
 
       savedPokemons = [];
 
+      let filteredPokemonType;
+
+      const getPokemonType = document.querySelector("#show-type");
+
       const addNewName = document.querySelector("#pokemon-name");
       const addNewType = document.querySelector("#pokemon-type");
       const addNewPokemon = document.querySelector("#add-pokemon");
 
-
-        //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
-        //Fulgte denne og måtte få hjlep av chatgpt til å formulere denne annerledes slik at jeg kan bruke en for each
+      //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
+      //Fulgte denne og måtte få hjlep av chatgpt til å formulere denne annerledes slik at jeg kan bruke en for each
       async function fetchAllPokemon() {
         try {
           const response = await fetch(
@@ -137,7 +140,7 @@
             const pokemonImage = document.createElement("img");
             pokemonImage.classList.add("pokemon-image");
             pokemonImage.src = pokemon.sprites.front_default;
-            pokemonImage.style.width = "150px"
+            pokemonImage.style.width = "150px";
 
             const pokemonType = document.createElement("p");
             pokemonType.classList.add("pokemon-type");
@@ -262,22 +265,20 @@
       }
       //Lag din egen pokemon
       async function createNewPokemon() {
-       
         try {
           const newPokemon = {
             name: addNewName.value,
             types: [{ type: { name: addNewType.value } }],
             sprites: {
-              front_default: "assets/pokemon-png-18174.png"
+              front_default: "assets/pokemon-png-18174.png",
             },
           };
           pokemonData.unshift(newPokemon);
           console.log(pokemonData);
           displayAllPokemon(pokemonData);
 
-          if(newPokemon){
+          if (newPokemon) {
             await savePokemon(newPokemon);
-
           }
         } catch (error) {
           console.error(
@@ -287,26 +288,47 @@
         }
         addNewType.value = "";
         addNewName.value = "";
-
       }
       addNewPokemon.addEventListener("click", () => createNewPokemon());
 
       //Filtrere pokemon basert på type
-      async function fetchPokemonType(name){
-        try{
+      async function fetchPokemonType(name) {
+        try {
+          const pokemonTypeRequest = await fetch(
+            "https://pokeapi.co/api/v2/type/"
+          );
+          let typeResponse = await pokemonTypeRequest.json();
+          //return typeResponse;
+          const pokemonNameType = typeResponse.results.map(type => type.name);
+        
+          return pokemonNameType;
+          
+          console.log(pokemonNameType);
+        } catch (error) {
+          console.error("klarte ikke å fetche pokemon type url", error);
+        }
+      }
+      fetchPokemonType();
 
-            const pokemonTypeRequest = await fetch("https://pokeapi.co/api/v2/type/{name}");
-            let typeResponse = await pokemonTypeRequest.json();
-            return typeResponse;
-            //console.log(typeResponse);
+      function filterValues(){
+        let selectetPokeType;
+        selectetPokeType = document.querySelector("#pokemon-type").value;
+        filterPokemonType(selectetPokeType);
+      }
+
+      async function filterPokemonType(typeName){
+        try{
+            filteredPokemonType = await fetchPokemonType(typeName);
+            console.log("filtrerte pokemon type:",filteredPokemonType);
 
         }catch(error){
-            console.error("klarte ikke å fethe pokemon type url",error);
+            console.error("Klarte ikke hente filtrerte pokemon typer",error)
 
         }
-
       }
-      //fetchPokemonType();
+      getPokemonType.addEventListener("click", () => filterValues());
+      
+      
     </script>
   </body>
 </html>
