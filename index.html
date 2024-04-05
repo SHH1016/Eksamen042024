@@ -7,9 +7,31 @@
     <title>Pokemons</title>
   </head>
   <body>
+
     <input type="text" placeholder="Pokemon navn" id="pokemon-name" />
     <input type="text" placeholder="Pokemon type" id="pokemon-type" />
     <input type="button" value="Legg til" id="add-pokemon" />
+    <select id="pokemon-type">
+        <option value="normal">normal</option>
+        <option value="fighting">fighting</option>
+        <option value="flying">flying</option>
+        <option value="poison">poison</option>
+        <option value="ground">ground</option>
+        <option value="rock">rock</option>
+        <option value="bug">bug</option>
+        <option value="ghost">ghost</option>
+        <option value="steel">steel</option>
+        <option value="fire">fire</option>
+        <option value="water">water</option>
+        <option value="grass">grass</option>
+        <option value="electric">electric</option>
+        <option value="psychic">psychic</option>
+        <option value="ice">ice</option>
+        <option value="dragon">dragon</option>
+        <option value="dark">dark</option>
+        <option value="fairy">fairy</option>
+        <option value="shadow">shadow</option>
+    </select>
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
@@ -20,10 +42,10 @@
       savedPokemons = [];
 
       const addNewName = document.querySelector("#pokemon-name");
-
       const addNewType = document.querySelector("#pokemon-type");
-
       const addNewPokemon = document.querySelector("#add-pokemon");
+
+
         //https://medium.com/@sergio13prez/fetching-them-all-poke-api-62ca580981a2
         //Fulgte denne og måtte få hjlep av chatgpt til å formulere denne annerledes slik at jeg kan bruke en for each
       async function fetchAllPokemon() {
@@ -127,9 +149,6 @@
 
             const saveBtn = document.createElement("button");
             saveBtn.innerHTML = "Lagre Pokemon";
-
-            // const editBtn = document.createElement("button");
-            //editBtn.innerHTML = "Rediger Pokemon";
 
             deleteBtn.addEventListener("click", function () {
               deletePokemon(pokemon);
@@ -271,6 +290,23 @@
 
       }
       addNewPokemon.addEventListener("click", () => createNewPokemon());
+
+      //Filtrere pokemon basert på type
+      async function fetchPokemonType(name){
+        try{
+
+            const pokemonTypeRequest = await fetch("https://pokeapi.co/api/v2/type/{name}");
+            let typeResponse = await pokemonTypeRequest.json();
+            return typeResponse;
+            //console.log(typeResponse);
+
+        }catch(error){
+            console.error("klarte ikke å fethe pokemon type url",error);
+
+        }
+
+      }
+      //fetchPokemonType();
     </script>
   </body>
 </html>
