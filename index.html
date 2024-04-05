@@ -10,28 +10,8 @@
     <input type="text" placeholder="Pokemon navn" id="pokemon-name" />
     <input type="text" placeholder="Pokemon type" id="pokemon-type" />
     <input type="button" value="Legg til" id="add-pokemon" />
-    <select id="pokemon-type">
-      <option value="normal">normal</option>
-      <option value="fighting">fighting</option>
-      <option value="flying">flying</option>
-      <option value="poison">poison</option>
-      <option value="ground">ground</option>
-      <option value="rock">rock</option>
-      <option value="bug">bug</option>
-      <option value="ghost">ghost</option>
-      <option value="steel">steel</option>
-      <option value="fire">fire</option>
-      <option value="water">water</option>
-      <option value="grass">grass</option>
-      <option value="electric">electric</option>
-      <option value="psychic">psychic</option>
-      <option value="ice">ice</option>
-      <option value="dragon">dragon</option>
-      <option value="dark">dark</option>
-      <option value="fairy">fairy</option>
-      <option value="shadow">shadow</option>
-    </select>
-    <button id="show-type">OK</button>
+    <label for = "select-type">Velg pokemon type</label>
+    <select id="select-type"></select>
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
@@ -42,8 +22,6 @@
       savedPokemons = [];
 
       let filteredPokemonType;
-
-      const getPokemonType = document.querySelector("#show-type");
 
       const addNewName = document.querySelector("#pokemon-name");
       const addNewType = document.querySelector("#pokemon-type");
@@ -292,43 +270,35 @@
       addNewPokemon.addEventListener("click", () => createNewPokemon());
 
       //Filtrere pokemon basert på type
-      async function fetchPokemonType(name) {
+      async function fetchPokemonType() {
         try {
           const pokemonTypeRequest = await fetch(
             "https://pokeapi.co/api/v2/type/"
           );
-          let typeResponse = await pokemonTypeRequest.json();
-          //return typeResponse;
-          const pokemonNameType = typeResponse.results.map(type => type.name);
+          const typeResponse = await pokemonTypeRequest.json();
+          const dataResults = typeResponse.results;
         
-          return pokemonNameType;
-          
-          console.log(pokemonNameType);
+          //henter inn section
+          const getPokemonType = document.querySelector("#select-type");
+
+          typeResponse.results.forEach((type) => {
+            const option = document.createElement("option");
+            option.value= type.name;
+            option.textContent = type.name[0] + type.name.slice(1);
+            getPokemonType.appendChild(option);
+          });
+          //return pokemonNameType;
+
+          console.log(typeResponse);
+          console.log(dataResults);
         } catch (error) {
           console.error("klarte ikke å fetche pokemon type url", error);
         }
       }
+      
       fetchPokemonType();
 
-      function filterValues(){
-        let selectetPokeType;
-        selectetPokeType = document.querySelector("#pokemon-type").value;
-        filterPokemonType(selectetPokeType);
-      }
-
-      async function filterPokemonType(typeName){
-        try{
-            filteredPokemonType = await fetchPokemonType(typeName);
-            console.log("filtrerte pokemon type:",filteredPokemonType);
-
-        }catch(error){
-            console.error("Klarte ikke hente filtrerte pokemon typer",error)
-
-        }
-      }
-      getPokemonType.addEventListener("click", () => filterValues());
-      
-      
+     
     </script>
   </body>
 </html>
