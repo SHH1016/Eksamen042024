@@ -11,9 +11,7 @@
     <input type="text" placeholder="Pokemon type" id="pokemon-type" />
     <input type="button" value="Legg til" id="add-pokemon" />
     <!--<select id="select-type"></select>-->
-    <div id="button-container">
-      <button id="find-type">velg type</button>
-    </div>
+    <div id="button-container"></div>
 
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
@@ -282,10 +280,9 @@
           );
           const typeResponse = await pokemonTypeRequest.json();
           const dataResults = typeResponse.results;
+         
+          typeResponse.results.forEach((type) => selectTypeButton(type.name, type.url));
 
-          typeResponse.results.forEach((type) => {
-            selectTypeButton(type.name);
-          });
           console.log(typeResponse);
           console.log(dataResults);
         } catch (error) {
@@ -295,15 +292,37 @@
 
       fetchPokemonType();
 
-      function selectTypeButton(pokemonTypeName) {
-        const findPokemonType = document.querySelector("#find-type");
-        findPokemonType.textContent =
-          pokemonTypeName[0] + pokemonTypeName.slice(1);
+      function selectTypeButton(pokemonTypeName, pokemonTypeUrl) {
+        const buttonContainer = document.querySelector("#button-container");
+        const findPokemonType = document.createElement("button");
+        findPokemonType.textContent = pokemonTypeName;
+        console.log(pokemonTypeName);
         findPokemonType.addEventListener("click", () =>
-          filterPokemonType(type)
+
+          filterPokemonType(pokemonTypeUrl)
         );
         buttonContainer.appendChild(findPokemonType);
       }
+
+      async function filterPokemonType(typeUrl){
+        try{
+            const selectedTypeResponse = await fetch (typeUrl);
+            
+            const data = await selectedTypeResponse.json();
+
+            const dataUrl = typeUrl;
+
+            
+           
+            //console.log(dataUrl)
+            console.log(data);
+            console.log(typeUrl);
+        }catch(error){
+            console.log("Klarte ikke å fetcte type fra apiet", error);
+
+        }
+      }
+
     </script>
   </body>
 </html>
