@@ -273,6 +273,7 @@
       addNewPokemon.addEventListener("click", () => createNewPokemon());
 
       //Filtrere pokemon basert på type
+      //https://kennethscoggins.medium.com/how-to-use-javascript-fetch-chaining-with-the-pokemon-api-to-get-that-deep-data-3f0f45abb5b7
       async function fetchPokemonType() {
         try {
           const pokemonTypeRequest = await fetch(
@@ -280,8 +281,10 @@
           );
           const typeResponse = await pokemonTypeRequest.json();
           const dataResults = typeResponse.results;
-         
-          typeResponse.results.forEach((type) => selectTypeButton(type.name, type.url));
+
+          typeResponse.results.forEach((type) =>
+            selectTypeButton(type.name, type.url)
+          );
 
           console.log(typeResponse);
           console.log(dataResults);
@@ -298,31 +301,33 @@
         findPokemonType.textContent = pokemonTypeName;
         console.log(pokemonTypeName);
         findPokemonType.addEventListener("click", () =>
-
-          filterPokemonType(pokemonTypeUrl)
+          filterPokemonType(pokemonTypeName, pokemonTypeUrl)
         );
         buttonContainer.appendChild(findPokemonType);
       }
+      // henter url fra parameter
 
-      async function filterPokemonType(typeUrl){
-        try{
-            const selectedTypeResponse = await fetch (typeUrl);
-            
-            const data = await selectedTypeResponse.json();
+      async function filterPokemonType(type, typeUrl) {
+        try {
+          const selectedTypeResponse = await fetch(typeUrl);
 
-            const dataUrl = typeUrl;
+          const data = await selectedTypeResponse.json();
 
-            
-           
-            //console.log(dataUrl)
-            console.log(data);
-            console.log(typeUrl);
-        }catch(error){
-            console.log("Klarte ikke å fetcte type fra apiet", error);
+          const dataUrl = typeUrl;
 
+          let pokemonNameType = pokemonData.filter(
+            (pokemonType) => pokemonType.types[0].type.name === typeUrl.name
+          );
+
+          
+
+          //console.log(pokemonNameType)
+          console.log(data);
+          console.log(typeUrl);
+        } catch (error) {
+          console.log("Klarte ikke å fetcte type fra apiet", error);
         }
       }
-
     </script>
   </body>
 </html>
