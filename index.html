@@ -315,13 +315,16 @@
 
           const dataUrl = typeUrl;
 
-          let pokemonNameType = pokemonData.filter(
-            (pokemonType) => pokemonType.types[0].type.name === typeUrl.name
+          let pokemonNameType = pokemonData.map(
+            (pokemonType) => pokemonType.types[0].type.name === type
           );
 
+          if(pokemonNameType === true){
+            displayAllPokemon(pokemonNameType);
+          }
           
 
-          //console.log(pokemonNameType)
+          console.log(pokemonNameType)
           console.log(data);
           console.log(typeUrl);
         } catch (error) {
