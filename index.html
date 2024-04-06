@@ -325,65 +325,23 @@
           selectedTypeData = await Promise.all(getTypePokemon);
           console.log(selectedTypeData);
 
-          /*
           const filteredPokemonType = pokemonData.filter((pokemon) => {
             return pokemon.types.some((type) => {
-              return selectedPokemon.types.some((type) => {
-                return type.type.name === selectTypeButton.types[0].type.name;
-              });
+              return type.type.name === selectedTypeData[0].types[0].type.name;
             });
           });
-          */
-          const filteredPokemonType = pokemonData.filter((pokemon)=>{
-            return pokemon.types.some((type)=>{
-                return type.type.name === selectedTypeData[0].types[0].type.name;
-            })
-          })
           console.log(filteredPokemonType);
-
-          const filteredPT = selectedTypeData.filter((selectedPokemon)=>{
-            return pokemonData.some((pokemon)=>{
-                return selectedPokemon.types.some((type)=>{
-                    return type.type.name === pokemon.types[0].type.name;
-                });
-            });
-          });
-          console.log(filteredPT)
 
           displaySelectedType(filteredPokemonType);
 
-          /*
-          let pokemonNameType = pokemonData.map(
-            (pokemonType) =>
-                pokemonType.types[0].type.name ===
-              selectedTypeData[0].types[0].type.name
-          );
-          console.log(pokemonNameType);
-
-          const filterType = selectedTypeData.map((pokemon)=>{
-            selectedTypeData.some((pokemon)=> pokemon.types[0].type.name === pokemonData.types[0].type.name);
-            return newArray
-          })
-          console.log(filterType);
-
-           if (pokemonNameType.includes(selectedTypeData)){
-               displaySelectedType(selectedTypeData);
-           }
-            
-          //let pokemonNameTypeTest = pokemonData.map((pokemonName)=> pokemonName.name === selectedTypeData[0].name);
-          //let pokemonNameTypeTest = selectedTypeData.map((pokemonTypeEqual)=> pokemonTypeEqual[0].types[0].type.name === pokemonType.types[0].type.name)
-
-          const typeIndex = pokemonNameType.filter((index) => index === true);
-          console.log(typeIndex);
-          */
-
-          //console.log(pokemonNameTypeTest);
           console.log(data);
           console.log(typeUrl);
+          
         } catch (error) {
           console.log("Klarte ikke å fetcte type fra apiet", error);
         }
       }
+
       async function displaySelectedType(selectedTypePokemon) {
         const selectedPokeContainer = document.querySelector(
           "#selected-poke-container"
