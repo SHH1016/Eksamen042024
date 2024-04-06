@@ -10,8 +10,11 @@
     <input type="text" placeholder="Pokemon navn" id="pokemon-name" />
     <input type="text" placeholder="Pokemon type" id="pokemon-type" />
     <input type="button" value="Legg til" id="add-pokemon" />
-    <label for = "select-type">Velg pokemon type</label>
-    <select id="select-type"></select>
+    <!--<select id="select-type"></select>-->
+    <div id="button-container">
+      <button id="find-type">velg type</button>
+    </div>
+
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
@@ -22,6 +25,8 @@
       savedPokemons = [];
 
       let filteredPokemonType;
+
+      const buttonContainer = document.querySelector("#button-container");
 
       const addNewName = document.querySelector("#pokemon-name");
       const addNewType = document.querySelector("#pokemon-type");
@@ -277,28 +282,28 @@
           );
           const typeResponse = await pokemonTypeRequest.json();
           const dataResults = typeResponse.results;
-        
-          //henter inn section
-          const getPokemonType = document.querySelector("#select-type");
 
           typeResponse.results.forEach((type) => {
-            const option = document.createElement("option");
-            option.value= type.name;
-            option.textContent = type.name[0] + type.name.slice(1);
-            getPokemonType.appendChild(option);
+            selectTypeButton(type.name);
           });
-          //return pokemonNameType;
-
           console.log(typeResponse);
           console.log(dataResults);
         } catch (error) {
           console.error("klarte ikke å fetche pokemon type url", error);
         }
       }
-      
+
       fetchPokemonType();
 
-     
+      function selectTypeButton(pokemonTypeName) {
+        const findPokemonType = document.querySelector("#find-type");
+        findPokemonType.textContent =
+          pokemonTypeName[0] + pokemonTypeName.slice(1);
+        findPokemonType.addEventListener("click", () =>
+          filterPokemonType(type)
+        );
+        buttonContainer.appendChild(findPokemonType);
+      }
     </script>
   </body>
 </html>
