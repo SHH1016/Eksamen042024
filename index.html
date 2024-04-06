@@ -12,7 +12,7 @@
     <input type="button" value="Legg til" id="add-pokemon" />
     <!--<select id="select-type"></select>-->
     <div id="button-container"></div>
-
+    <div id="selected-poke-container"></div>
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
@@ -325,27 +325,75 @@
           selectedTypeData = await Promise.all(getTypePokemon);
           console.log(selectedTypeData);
 
-          let pokemonNameType = pokemonData.map(
-            (pokemonType) => pokemonType.types[0].type.name === selectedTypeData[0].types[0].type.name
-          );
+         /* const filteredPokemon = pokemonData.filter((pokemon) => {
+            return pokemon.types.some(
+              (pokemon) =>
+                pokemon.types[0].type.name ===
+                selectedTypeData[0].types[0].type.name
+            );
+          });
+          */
+          //console.log(filteredPokemon);
 
+          let pokemonNameType = pokemonData.map(
+            (pokemonType) =>
+                pokemonType.types[0].type.name ===
+              selectedTypeData[0].types[0].type.name
+          );
+          console.log(pokemonNameType);
+
+          const filterType = selectedTypeData.map((pokemon)=>{
+            selectedTypeData.some((pokemon)=> pokemon.types[0].type.name === pokemonData.types[0].type.name);
+            return newArray
+          })
+          console.log(filterType);
+
+           if (pokemonNameType.includes(selectedTypeData)){
+               displaySelectedType(selectedTypeData);
+           }
+
+          //let pokemonNameTypeTest = pokemonData.map((pokemonName)=> pokemonName.name === selectedTypeData[0].name);
+          //let pokemonNameTypeTest = selectedTypeData.map((pokemonTypeEqual)=> pokemonTypeEqual[0].types[0].type.name === pokemonType.types[0].type.name)
 
           const typeIndex = pokemonNameType.filter((index) => index === true);
           console.log(typeIndex);
 
-          if (typeIndex === true) {
-            //displaySelectedType(data);
-          }
 
-          console.log(pokemonNameType);
+
+
+          //console.log(pokemonNameTypeTest);
           console.log(data);
           console.log(typeUrl);
         } catch (error) {
           console.log("Klarte ikke å fetcte type fra apiet", error);
         }
       }
-      async function displaySelectedType() {
-        pokemonContainer.innerHTML = "";
+      async function displaySelectedType(selectedTypePokemon) {
+        const selectedPokeContainer = document.querySelector(
+          "#selected-poke-container"
+        );
+        selectedPokeContainer.innerHTML = "";
+        selectedTypePokemon.forEach(async function (typePokemon) {
+
+            const pokemonCard = document.createElement("div");
+            pokemonCard.classList.add("pokemon-card");
+
+            const pokemonName = document.createElement("p");
+            pokemonName.classList.add("pokemon-name");
+            pokemonName.innerHTML = `Navn: ${typePokemon.name}`;
+
+            const pokemonImage = document.createElement("img");
+            pokemonImage.classList.add("pokemon-image");
+            pokemonImage.src = typePokemon.sprites.front_default;
+
+            const pokemonType = document.createElement("p");
+            pokemonType.classList.add("pokemon-type");
+            pokemonType.innerHTML = `Type: ${typePokemon.types[0].type.name}`;
+
+            pokemonCard.append(pokemonName, pokemonImage,pokemonType);
+            selectedPokeContainer.appendChild(pokemonCard);
+
+        });
       }
     </script>
   </body>
