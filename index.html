@@ -20,11 +20,15 @@
     <script>
       let pokemonData = [];
 
+      let selectedTypeData = [];
+
       savedPokemons = [];
 
       let filteredPokemonType;
 
       const buttonContainer = document.querySelector("#button-container");
+
+      const pokemonContainer = document.querySelector("#pokemon-container");
 
       const addNewName = document.querySelector("#pokemon-name");
       const addNewType = document.querySelector("#pokemon-type");
@@ -310,30 +314,38 @@
       async function filterPokemonType(type, typeUrl) {
         try {
           const selectedTypeResponse = await fetch(typeUrl);
-
           const data = await selectedTypeResponse.json();
 
           const dataUrl = typeUrl;
 
+          const getTypePokemon = data.pokemon.map(async function (pokemons) {
+            const newResponse = await fetch(pokemons.pokemon.url);
+            return newResponse.json();
+          });
+          selectedTypeData = await Promise.all(getTypePokemon);
+          console.log(selectedTypeData);
+
           let pokemonNameType = pokemonData.map(
-            (pokemonType) => pokemonType.types[0].type.name === type
+            (pokemonType) => pokemonType.types[0].type.name === selectedTypeData[0].types[0].type.name
           );
+
 
           const typeIndex = pokemonNameType.filter((index) => index === true);
           console.log(typeIndex);
 
-          if(pokemonNameType === typeIndex){
-           const trueToTypeName = pokemonNameType;
-           displayAllPokemon(pokemonNameType);
+          if (typeIndex === true) {
+            //displaySelectedType(data);
           }
-          
 
-          console.log(pokemonNameType)
+          console.log(pokemonNameType);
           console.log(data);
           console.log(typeUrl);
         } catch (error) {
           console.log("Klarte ikke å fetcte type fra apiet", error);
         }
+      }
+      async function displaySelectedType() {
+        pokemonContainer.innerHTML = "";
       }
     </script>
   </body>
