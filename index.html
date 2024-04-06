@@ -319,8 +319,12 @@
             (pokemonType) => pokemonType.types[0].type.name === type
           );
 
-          if(pokemonNameType === true){
-            displayAllPokemon(pokemonNameType);
+          const typeIndex = pokemonNameType.filter((index) => index === true);
+          console.log(typeIndex);
+
+          if(pokemonNameType === typeIndex){
+           const trueToTypeName = pokemonNameType;
+           displayAllPokemon(pokemonNameType);
           }
           
 
