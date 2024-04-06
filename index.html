@@ -103,6 +103,7 @@
           pokemonContainer.appendChild(pokemonCard);
         });
       }
+
       //lagrede pokemon display
       async function displaySavedPokemon() {
         try {
@@ -290,6 +291,10 @@
             selectTypeButton(type.name, type.url)
           );
 
+          typeResponse.results.forEach((nameType) => {
+            filterColor(nameType.name);
+          });
+
           console.log(typeResponse);
           console.log(dataResults);
         } catch (error) {
@@ -330,16 +335,64 @@
               return type.type.name === selectedTypeData[0].types[0].type.name;
             });
           });
-          console.log(filteredPokemonType);
 
           displaySelectedType(filteredPokemonType);
 
+          console.log(filteredPokemonType);
           console.log(data);
           console.log(typeUrl);
-          
         } catch (error) {
           console.log("Klarte ikke å fetcte type fra apiet", error);
         }
+      }
+      //filterfarge for element på pokemon
+      function filterColor(typeName) {
+        console.log(typeName);
+        let color ="";
+        if (typeName) {
+          if (typeName === typeName) {
+            if (typeName === "grass") {
+              color = "green";
+            } else if (typeName === "normal") {
+                color ="lightgrey";
+            } else if (typeName === "fighting") {
+              color ="orange";
+            } else if (typeName === "flying") {
+                color ="lightblue";
+            } else if (typeName === "poison") {
+                color ="purple";
+            } else if (typeName === "ground") {
+                color ="darkgrey";
+            } else if (typeName === "rock") {
+                color ="grey";
+            } else if (typeName === "bug") {
+                color ="lightgreen";
+            } else if (typeName === "ghost") {
+                color ="darkwhite";
+            } else if (typeName === "steel") {
+                color ="lightblack";
+            } else if (typeName === "fire") {
+                color ="fire";
+            } else if (typeName === "water") {
+                color ="blue";
+            } else if (typeName === "electric") {
+                color ="purple";
+            } else if (typeName === "psychic") {
+                color ="pink";
+            } else if (typeName === "ice") {
+                color ="lightblue";
+            } else if (typeName === "dragon") {
+                color ="darkblue";
+            } else if (typeName === "dark") {
+                color ="black";
+            } else if (typeName === "fairy") {
+                color ="lightpink";
+            } else if (typeName === "shadow") {
+                color ="white";
+            }
+          }
+        }
+        return color;
       }
 
       async function displaySelectedType(selectedTypePokemon) {
@@ -350,6 +403,8 @@
         selectedTypePokemon.forEach(async function (typePokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
+          const backgroundColor = filterColor(typePokemon.types[0].type.name);
+          pokemonCard.style.backgroundColor = backgroundColor;
 
           const pokemonName = document.createElement("p");
           pokemonName.classList.add("pokemon-name");
