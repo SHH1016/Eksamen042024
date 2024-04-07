@@ -22,12 +22,11 @@
 
       let selectedTypeData = [];
 
-      savedPokemons = [];
+      let savedPokemons = [];
 
       let filteredPokemonType;
 
       const buttonContainer = document.querySelector("#button-container");
-
       const pokemonContainer = document.querySelector("#pokemon-container");
 
       const addNewName = document.querySelector("#pokemon-name");
@@ -143,10 +142,6 @@
               deletePokemon(pokemon);
             });
 
-            // editBtn.addEventListener("click", function () {
-            // editPokemon(pokemon);
-            //});
-
             pokemonCard.append(
               pokemonImage,
               pokemonName,
@@ -172,7 +167,6 @@
             (poke) => poke.name === pokemon.name
           );
           //
-
           if (maxLimitPokemon <= 5 && !checkPokemon) {
             savedPokemons.push(pokemon);
 
@@ -190,7 +184,6 @@
           console.error("Klarte ikke å lagre pokemon til localstorage", error);
         }
       }
-
       //slette pokemon
       async function deletePokemon(pokemonDelete) {
         try {
@@ -212,7 +205,6 @@
                 (poke) => poke.name !== pokemonDelete.name
               );
             }
-            //
           }
 
           displayAllPokemon(pokemonData);
@@ -229,7 +221,6 @@
         try {
           console.log(`index:`, index);
           console.log(`pokemonData:`, pokemonData);
-          // console.log(`pokemonførendring:`,pokemonData[indexOfPokemon]);
 
           const newPokeName = prompt("Gi et nytt Navn");
           const newPokeType = prompt("Gi en ny Type");
@@ -291,10 +282,6 @@
             selectTypeButton(type.name, type.url)
           );
 
-          typeResponse.results.forEach((nameType) => {
-            filterColor(nameType.name);
-          });
-
           console.log(typeResponse);
           console.log(dataResults);
         } catch (error) {
@@ -314,8 +301,8 @@
         );
         buttonContainer.appendChild(findPokemonType);
       }
-      // henter url fra parameter
 
+      // henter url fra parameter
       async function filterPokemonType(type, typeUrl) {
         try {
           const selectedTypeResponse = await fetch(typeUrl);
@@ -328,7 +315,7 @@
             return newResponse.json();
           });
           selectedTypeData = await Promise.all(getTypePokemon);
-          console.log(selectedTypeData);
+          //console.log(selectedTypeData);
 
           const filteredPokemonType = pokemonData.filter((pokemon) => {
             return pokemon.types.some((type) => {
@@ -336,11 +323,27 @@
             });
           });
 
-          displaySelectedType(filteredPokemonType);
+          //her må jeg hente inn localstorage sine pokemon også filtrere og displaye
+          let savedPokemons =JSON.parse(localStorage.getItem("savedPokemons")) || [];
+
+          const filterPokemonLocal = savedPokemons.filter((pokemon) => {
+            
+            return pokemon.types.some((type) => {
+              return type.type.name === selectedTypeData[0].types[0].type.name;
+            });
+            localStorage.setItem(
+              "savedPokemons",
+              JSON.stringify(savedPokemons)
+            );
+          });
+          console.log(filterPokemonLocal);
+
+          //display savedPokemon
+          displaySelectedType(filteredPokemonType, filterPokemonLocal);
 
           console.log(filteredPokemonType);
           console.log(data);
-          console.log(typeUrl);
+          console.log(selectedTypeData);
         } catch (error) {
           console.log("Klarte ikke å fetcte type fra apiet", error);
         }
@@ -348,59 +351,93 @@
       //filterfarge for element på pokemon
       function filterColor(typeName) {
         console.log(typeName);
-        let color ="";
+        let color = "";
+
         if (typeName) {
-          if (typeName === typeName) {
-            if (typeName === "grass") {
-              color = "green";
-            } else if (typeName === "normal") {
-                color ="lightgrey";
-            } else if (typeName === "fighting") {
-              color ="orange";
-            } else if (typeName === "flying") {
-                color ="lightblue";
-            } else if (typeName === "poison") {
-                color ="purple";
-            } else if (typeName === "ground") {
-                color ="darkgrey";
-            } else if (typeName === "rock") {
-                color ="grey";
-            } else if (typeName === "bug") {
-                color ="lightgreen";
-            } else if (typeName === "ghost") {
-                color ="darkwhite";
-            } else if (typeName === "steel") {
-                color ="lightblack";
-            } else if (typeName === "fire") {
-                color ="fire";
-            } else if (typeName === "water") {
-                color ="blue";
-            } else if (typeName === "electric") {
-                color ="purple";
-            } else if (typeName === "psychic") {
-                color ="pink";
-            } else if (typeName === "ice") {
-                color ="lightblue";
-            } else if (typeName === "dragon") {
-                color ="darkblue";
-            } else if (typeName === "dark") {
-                color ="black";
-            } else if (typeName === "fairy") {
-                color ="lightpink";
-            } else if (typeName === "shadow") {
-                color ="white";
-            }
+          if (typeName === "grass") {
+            color = "green";
+          } else if (typeName === "normal") {
+            color = "lightgrey";
+          } else if (typeName === "fighting") {
+            color = "orange";
+          } else if (typeName === "flying") {
+            color = "lightblue";
+          } else if (typeName === "poison") {
+            color = "purple";
+          } else if (typeName === "ground") {
+            color = "darkgrey";
+          } else if (typeName === "rock") {
+            color = "grey";
+          } else if (typeName === "bug") {
+            color = "lightgreen";
+          } else if (typeName === "ghost") {
+            color = "darkwhite";
+          } else if (typeName === "steel") {
+            color = "lightblack";
+          } else if (typeName === "fire") {
+            color = "red";
+          } else if (typeName === "water") {
+            color = "blue";
+          } else if (typeName === "electric") {
+            color = "yellow";
+          } else if (typeName === "psychic") {
+            color = "pink";
+          } else if (typeName === "ice") {
+            color = "black";
+          } else if (typeName === "dragon") {
+            color = "darkblue";
+          } else if (typeName === "dark") {
+            color = "black";
+          } else if (typeName === "fairy") {
+            color = "lightpink";
+          } else if (typeName === "shadow") {
+            color = "white";
           }
         }
         return color;
       }
-
-      async function displaySelectedType(selectedTypePokemon) {
+    //vis valgte pokemon type
+      async function displaySelectedType(
+        selectedTypePokemon,
+        filterPokemonLocal
+      ) {
         const selectedPokeContainer = document.querySelector(
           "#selected-poke-container"
         );
         selectedPokeContainer.innerHTML = "";
+
         selectedTypePokemon.forEach(async function (typePokemon) {
+          const pokemonCard = document.createElement("div");
+          pokemonCard.classList.add("pokemon-card");
+          const backgroundColor = filterColor(typePokemon.types[0].type.name);
+          pokemonCard.style.backgroundColor = backgroundColor;
+
+          const pokemonName = document.createElement("p");
+          pokemonName.classList.add("pokemon-name");
+          pokemonName.innerHTML = `Navn: ${typePokemon.name}`;
+
+          const pokemonImage = document.createElement("img");
+          pokemonImage.classList.add("pokemon-image");
+          pokemonImage.src = typePokemon.sprites.front_default;
+
+          const pokemonType = document.createElement("p");
+          pokemonType.classList.add("pokemon-type");
+          pokemonType.innerHTML = `Type: ${typePokemon.types[0].type.name}`;
+
+          pokemonCard.append(pokemonName, pokemonImage, pokemonType);
+          selectedPokeContainer.appendChild(pokemonCard);
+        });
+        await displaySelectedTypeLocal(filterPokemonLocal);
+      }
+      //vis valgte pokemon type fra localstorage
+      async function displaySelectedTypeLocal(filterPokemonLocal) {
+        const selectedPokeContainer = document.querySelector(
+          "#selected-poke-container"
+        );
+        //selectedPokeContainer.innerHTML = "";
+
+        JSON.parse(localStorage.getItem("savedPokemons")) || [];
+        filterPokemonLocal.forEach(async function (typePokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
           const backgroundColor = filterColor(typePokemon.types[0].type.name);
