@@ -162,7 +162,7 @@
             JSON.parse(localStorage.getItem("savedPokemons")) || [];
           maxLimitPokemon = savedPokemons.length;
 
-          //fikk denne løsningen av chatgpt for å sammenligne å sjekke om et element passerer testen i local om den finnes fra før.
+          //fikk denne løsningen av chatgpt for å sammenligne å sjekke om et element navn passerer testen i local om den finnes fra før.
           const checkPokemon = savedPokemons.some(
             (poke) => poke.name === pokemon.name
           );
@@ -206,7 +206,6 @@
               );
             }
           }
-
           displayAllPokemon(pokemonData);
           displaySavedPokemon();
         } catch (error) {
@@ -299,6 +298,7 @@
         findPokemonType.addEventListener("click", () =>
           filterPokemonType(pokemonTypeName, pokemonTypeUrl)
         );
+        //må endre til at knappen kun skal hente navn og sammenligne den med kun navn
         buttonContainer.appendChild(findPokemonType);
       }
 
@@ -315,11 +315,13 @@
             return newResponse.json();
           });
           selectedTypeData = await Promise.all(getTypePokemon);
-          //console.log(selectedTypeData);
+          console.log(selectedTypeData);
+
+          let selectedType = selectedTypeData[0].types[0].type.name;
 
           const filteredPokemonType = pokemonData.filter((pokemon) => {
             return pokemon.types.some((type) => {
-              return type.type.name === selectedTypeData[0].types[0].type.name;
+              return type.type.name === selectedType;
             });
           });
 
@@ -327,7 +329,6 @@
           let savedPokemons =JSON.parse(localStorage.getItem("savedPokemons")) || [];
 
           const filterPokemonLocal = savedPokemons.filter((pokemon) => {
-            
             return pokemon.types.some((type) => {
               return type.type.name === selectedTypeData[0].types[0].type.name;
             });
