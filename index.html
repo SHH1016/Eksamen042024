@@ -12,7 +12,9 @@
     <input type="button" value="Legg til" id="add-pokemon" />
     <!--<select id="select-type"></select>-->
     <div id="button-container"></div>
+    <h1>Dine valgte pokemontype:</h1>
     <div id="selected-poke-container"></div>
+    <h1>50 pokemon</h1>
     <div id="pokemon-container"></div>
     <h1>Dine lagrede Pokemons</h1>
     <div id="pokemon-saved-container"></div>
@@ -61,6 +63,9 @@
         pokemonData.forEach(async function (pokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
+          pokemonCard.style.width = "400px"
+          const backgroundColor = filterColor(pokemon.types[0].type.name);
+          pokemonCard.style.backgroundColor = backgroundColor;
 
           const pokemonName = document.createElement("p");
           pokemonName.classList.add("pokemon-name");
@@ -117,6 +122,10 @@
           savedPokemons.forEach((pokemon) => {
             const pokemonCard = document.createElement("div");
             pokemonCard.classList.add("pokemon-card");
+            pokemonCard.style.width = "400px"
+
+            const backgroundColor = filterColor(pokemon.types[0].type.name);
+            pokemonCard.style.backgroundColor = backgroundColor;
 
             const pokemonName = document.createElement("p");
             pokemonName.classList.add("pokemon-name");
@@ -330,7 +339,7 @@
 
           const filterPokemonLocal = savedPokemons.filter((pokemon) => {
             return pokemon.types.some((type) => {
-              return type.type.name === selectedTypeData[0].types[0].type.name;
+              return type.type.name === selectedType;
             });
             localStorage.setItem(
               "savedPokemons",
@@ -410,6 +419,7 @@
         selectedTypePokemon.forEach(async function (typePokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
+          pokemonCard.style.width = "400px"
           const backgroundColor = filterColor(typePokemon.types[0].type.name);
           pokemonCard.style.backgroundColor = backgroundColor;
 
@@ -441,6 +451,7 @@
         filterPokemonLocal.forEach(async function (typePokemon) {
           const pokemonCard = document.createElement("div");
           pokemonCard.classList.add("pokemon-card");
+          pokemonCard.style.width = "400px"
           const backgroundColor = filterColor(typePokemon.types[0].type.name);
           pokemonCard.style.backgroundColor = backgroundColor;
 
