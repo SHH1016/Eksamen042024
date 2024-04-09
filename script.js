@@ -8,11 +8,16 @@ let pokemonData = [];
 
 let allPokemons;
 
+
 //false/true basert på condtion
 let updatePokemons = true;
+console.log("updatePokemon",updatePokemons)
+let pokemonSavedToSession = false;
+console.log("SavedToSession",pokemonSavedToSession);
 
 async function fetchAllPokemon() {
   try {
+   
     const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
     const data = await response.json();
 
@@ -27,58 +32,76 @@ async function fetchAllPokemon() {
     const randomPokemonIndex = await makeRandomIndex(pokemonData.length, 3);
     console.log(randomPokemonIndex);
 
-    sessionStorage.setItem(
-      "PokemonInTheGame",
-      JSON.stringify({ yourPokemon: [], opponentsPokemon: [] })
-    );
-    //let allPokemons = JSON.parse(sessionStorage.getItem("PokemonInTheGame"));
+    
+   const showSavedPokemon =  await setPokemons()
 
-    JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
-    JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
+   if(showSavedPokemon){
+     await setPokemons()
+   }else{
+     //let allPokemons = JSON.parse(sessionStorage.getItem("PokemonInTheGame"));
+     if(yourPokemon.length === 0 && opponentsPokemon.length === 0 && !pokemonSavedToSession){
 
+        randomPokemonIndex.forEach((index) => {
+            const randomPokemon = pokemonData[index];
+            console.log(randomPokemon);
+            if (randomPokemon) {
+              yourPokemon.push(randomPokemon);
+              console.log(yourPokemon.length)
+              sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
+              //lagrer til sessionstorage
+              //fikse så den kan hente inn nye pokemon på start og låse dem
+            }
+          });
+          //random pokemon til opponentsPokemon Array
+          const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
+          console.log(randomPokemonIndex2);
+    
+          randomPokemonIndex2.forEach((index) => {
+            const randomPokemon2 = pokemonData[index];
+            console.log(randomPokemon2);
+            if (randomPokemon2) {
+              opponentsPokemon.push(randomPokemon2);
+              //lagrer til sessionstorage
+              console.log(opponentsPokemon.length)
+              sessionStorage.setItem(
+                "opponentsPokemon",
+                JSON.stringify(opponentsPokemon)
+              );
+            }
+            
+          });
+
+          pokemonSavedToSession = true;
+    }
+
+   }
     // while(!yourPokemon.length && !opponentsPokemon.length < 3){
     //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
-    if (
-      updatePokemons &&
-      yourPokemon.length === 3 &&
-      opponentsPokemon.length === 3
-    ) {
-      randomPokemonIndex.forEach((index) => {
-        const randomPokemon = pokemonData[index];
-        console.log(randomPokemon);
-        if (randomPokemon) {
-          yourPokemon.push(randomPokemon);
-          //lagrer til sessionstorage
-          //fikse så den kan hente inn nye pokemon på start og låse dem
-        }
-      });
-      sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
-
-      //random pokemon til opponentsPokemon Array
-      const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
-      console.log(randomPokemonIndex2);
-
-      randomPokemonIndex2.forEach((index) => {
-        const randomPokemon2 = pokemonData[index];
-        console.log(randomPokemon2);
-        if (randomPokemon2) {
-          opponentsPokemon.push(randomPokemon2);
-          //lagrer til sessionstorage
-        }
-      });
-      sessionStorage.setItem(
-        "opponentsPokemon",
-        JSON.stringify(opponentsPokemon)
-      );
-    }
-    // setter en false på update den skal bli true når f.eks man skal starte nytt spill
-    //men har satt pokemon lagret i session, da de byttes ut etter en tid
-    updatePokemons = false;
   } catch (error) {
     console.error("Klarte ikke hente respons fra API", error);
   }
 }
-fetchAllPokemon();
+fetchAllPokemon()
+
+async function setPokemons() {
+
+    try{
+        const setYourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+        const setOpponentsPokemon = JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
+    
+        if(setYourPokemon.length === 3 && setOpponentsPokemon.length === 3){
+            yourPokemon = setYourPokemon;
+            opponentsPokemon = setOpponentsPokemon;
+            updatePokemons = false;
+            pokemonSavedToSession = true;
+            return;
+        }
+    }catch(error){
+        console.error("klarte ikke hente pokemon fra session storage", error);
+    }
+   
+
+}
 
 async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
   try {
@@ -103,12 +126,11 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
 async function showYourPokemon() {
   try {
     let yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
-
     const yourPokemonContainer = document.querySelector("#your-pokemons");
     yourPokemonContainer.innerHTML = "";
 
     yourPokemon.forEach(async function(pokemon, index){
-        console.log(pokemon)
+        //console.log(pokemon)
 
         const pokemonCard = document.createElement("div");
         pokemonCard.classList.add("pokemon-card");
