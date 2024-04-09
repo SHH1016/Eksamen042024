@@ -35,43 +35,38 @@ async function fetchAllPokemon() {
     JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
 
    // while(!yourPokemon.length && !opponentsPokemon.length < 3){
-    if(updatePokemons && yourPokemon.length && opponentsPokemon.length === 0){
+    //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
+    if(updatePokemons && yourPokemon.length === 3 && opponentsPokemon.length === 3){
 
         randomPokemonIndex.forEach((index) => {
             const randomPokemon = pokemonData[index];
             console.log(randomPokemon);
             if (randomPokemon) {
-
-              yourPokemon.push(randomPokemon);
+                   yourPokemon.push(randomPokemon);
               //lagrer til sessionstorage
             }
           });
           sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
+        
           //random pokemon til opponentsPokemon Array
           const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
           console.log(randomPokemonIndex2);
-      
-          randomPokemonIndex2.forEach((index) => {
-            const randomPokemon2 = pokemonData[index];
-            console.log(randomPokemon2);
-            if (randomPokemon2) {
-                
-              opponentsPokemon.push(randomPokemon2);
-              //lagrer til sessionstorage
-            }
-          });
-          sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
 
-          // setter en false på update den skal bli true når f.eks man skal starte nytt spill
-          //men har satt pokemon lagret i session, da de byttes ut etter en tid
-          updatePokemons = false;
-    
+         
+            randomPokemonIndex2.forEach((index) => {
+                const randomPokemon2 = pokemonData[index];
+                console.log(randomPokemon2);
+                if (randomPokemon2) {
+                  opponentsPokemon.push(randomPokemon2);
+                  //lagrer til sessionstorage
+                }
+              });
+              sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
     }
-    
-        
-    
+         // setter en false på update den skal bli true når f.eks man skal starte nytt spill
+          //men har satt pokemon lagret i session, da de byttes ut etter en tid
+            updatePokemons = false;
 
-    
 
   } catch (error) {
     console.error("Klarte ikke hente respons fra API", error);
