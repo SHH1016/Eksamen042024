@@ -187,5 +187,6 @@ function pokemonHealth (){
         stats:[[0].newHealth]
     }
 
+    yourPokemon.unshift(healthBar);
 
 }
