@@ -11,7 +11,6 @@ let allPokemons;
 //false/true basert på condtion
 let updatePokemons = true;
 
-
 async function fetchAllPokemon() {
   try {
     const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
@@ -28,46 +27,52 @@ async function fetchAllPokemon() {
     const randomPokemonIndex = await makeRandomIndex(pokemonData.length, 3);
     console.log(randomPokemonIndex);
 
-    sessionStorage.setItem("PokemonInTheGame", JSON.stringify({yourPokemon:[],opponentsPokemon:[]}))
+    sessionStorage.setItem(
+      "PokemonInTheGame",
+      JSON.stringify({ yourPokemon: [], opponentsPokemon: [] })
+    );
     //let allPokemons = JSON.parse(sessionStorage.getItem("PokemonInTheGame"));
 
     JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
     JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
 
-   // while(!yourPokemon.length && !opponentsPokemon.length < 3){
+    // while(!yourPokemon.length && !opponentsPokemon.length < 3){
     //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
-    if(updatePokemons && yourPokemon.length === 3 && opponentsPokemon.length === 3){
+    if (
+      updatePokemons &&
+      yourPokemon.length === 3 &&
+      opponentsPokemon.length === 3
+    ) {
+      randomPokemonIndex.forEach((index) => {
+        const randomPokemon = pokemonData[index];
+        console.log(randomPokemon);
+        if (randomPokemon) {
+          yourPokemon.push(randomPokemon);
+          //lagrer til sessionstorage
+        }
+      });
+      sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
 
-        randomPokemonIndex.forEach((index) => {
-            const randomPokemon = pokemonData[index];
-            console.log(randomPokemon);
-            if (randomPokemon) {
-                   yourPokemon.push(randomPokemon);
-              //lagrer til sessionstorage
-            }
-          });
-          sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
-        
-          //random pokemon til opponentsPokemon Array
-          const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
-          console.log(randomPokemonIndex2);
+      //random pokemon til opponentsPokemon Array
+      const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
+      console.log(randomPokemonIndex2);
 
-         
-            randomPokemonIndex2.forEach((index) => {
-                const randomPokemon2 = pokemonData[index];
-                console.log(randomPokemon2);
-                if (randomPokemon2) {
-                  opponentsPokemon.push(randomPokemon2);
-                  //lagrer til sessionstorage
-                }
-              });
-              sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
+      randomPokemonIndex2.forEach((index) => {
+        const randomPokemon2 = pokemonData[index];
+        console.log(randomPokemon2);
+        if (randomPokemon2) {
+          opponentsPokemon.push(randomPokemon2);
+          //lagrer til sessionstorage
+        }
+      });
+      sessionStorage.setItem(
+        "opponentsPokemon",
+        JSON.stringify(opponentsPokemon)
+      );
     }
-         // setter en false på update den skal bli true når f.eks man skal starte nytt spill
-          //men har satt pokemon lagret i session, da de byttes ut etter en tid
-            updatePokemons = false;
-
-
+    // setter en false på update den skal bli true når f.eks man skal starte nytt spill
+    //men har satt pokemon lagret i session, da de byttes ut etter en tid
+    updatePokemons = false;
   } catch (error) {
     console.error("Klarte ikke hente respons fra API", error);
   }
@@ -93,5 +98,39 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
   }
 }
 
-//Display pokemon
+//Display pokemons fra storage
 
+async function displayYourPokemons() {
+  try {
+
+    const yourPokemonContainer = document.querySelector("#your-pokemons");
+    yourPokemonContainer.innerHTML = "";
+
+    let yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+
+    yourPokemon.forEach((pokemon)=>{
+        const pokemonCard = document.createElement("div");
+        pokemonCard.classList.add("pokemon-card");
+        pokemonCard.style.width = "300px";
+
+        const pokemonImage = document.createElement("img");
+        pokemonImage.classList.add("pokemon-img");
+        pokemonImage.src = pokemon.sprites.front_default;
+        pokemonImage.style.width = "200px"
+
+        const pokemonName = document.createElement("h3");
+        pokemonName.classList.add("pokemon-name");
+        pokemonName.textContent = `${pokemon.name}`;
+
+        const pokemonAttack = document.createElement("h4");
+        pokemonAttack.classList.add("pokemon-attack");
+        pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`
+
+        pokemonCard.append(pokemonImage, pokemonName, pokemonAttack);
+        yourPokemonContainer.appendChild(pokemonCard);
+    })
+  } catch (error) {
+    console.error("klarte ikke å vise frem pokemon", error);
+  }
+}
+displayYourPokemons();
