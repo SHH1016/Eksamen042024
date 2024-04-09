@@ -1,0 +1,6 @@
+#sectionContainer{
+    display: flex;
+}
+#section-yourPokemon{
+    flex: 1;
+}
