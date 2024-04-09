@@ -37,7 +37,7 @@ async function fetchAllPokemon() {
       JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
     const setOpponentsPokemon =
       JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
-
+      //Har måttet debugge mye chatgpt da det ikke funket som jeg tenkte og flyttet funksjon opp her
     if (setYourPokemon.length === 3 && setOpponentsPokemon.length === 3) {
       yourPokemon = setYourPokemon;
       opponentsPokemon = setOpponentsPokemon;
