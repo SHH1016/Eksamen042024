@@ -8,6 +8,10 @@ let pokemonData = [];
 
 let allPokemons;
 
+//false/true basert på condtion
+let updatePokemons = true;
+
+
 async function fetchAllPokemon() {
   try {
     const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
@@ -31,10 +35,13 @@ async function fetchAllPokemon() {
     JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
 
    // while(!yourPokemon.length && !opponentsPokemon.length < 3){
+    if(updatePokemons && yourPokemon.length && opponentsPokemon.length === 0){
+
         randomPokemonIndex.forEach((index) => {
             const randomPokemon = pokemonData[index];
             console.log(randomPokemon);
             if (randomPokemon) {
+
               yourPokemon.push(randomPokemon);
               //lagrer til sessionstorage
             }
@@ -48,12 +55,20 @@ async function fetchAllPokemon() {
             const randomPokemon2 = pokemonData[index];
             console.log(randomPokemon2);
             if (randomPokemon2) {
-          
+                
               opponentsPokemon.push(randomPokemon2);
               //lagrer til sessionstorage
             }
           });
           sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
+
+          // setter en false på update den skal bli true når f.eks man skal starte nytt spill
+          //men har satt pokemon lagret i session, da de byttes ut etter en tid
+          updatePokemons = false;
+    
+    }
+    
+        
     
 
     
