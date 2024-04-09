@@ -107,6 +107,7 @@ async function showYourPokemon() {
     yourPokemonContainer.innerHTML = "";
 
     yourPokemon.forEach(async function(pokemon){
+        console.log(pokemon)
 
         const pokemonCard = document.createElement("div");
         pokemonCard.classList.add("pokemon-card");
@@ -124,6 +125,31 @@ async function showYourPokemon() {
 }
 showYourPokemon();
 
+async function showOpponentPokemon(){
+    try{
+        let opponentsPokemon = JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
+        const opponentsPokemonContainer = document.querySelector("#opponents-pokemons");
+        opponentsPokemonContainer.innerHTML="";
+
+            opponentsPokemon.forEach(async function(pokemon){
+            console.log(pokemon)
+    
+            const pokemonCard = document.createElement("div");
+            pokemonCard.classList.add("pokemon-card");
+            pokemonCard.style.width = "300px";
+    
+            const display = displayYourPokemons(pokemon,pokemonCard)
+    
+            pokemonCard.append(display)
+            opponentsPokemonContainer.appendChild(pokemonCard)
+        });
+
+    }catch (error){
+        console.error("klarte ikke vise motstander sine pokemon",error);
+    }
+}
+showOpponentPokemon();
+
 function displayYourPokemons(pokemon, pokemonCard) {
 
     const pokemonImage = document.createElement("img");
@@ -139,6 +165,6 @@ function displayYourPokemons(pokemon, pokemonCard) {
     pokemonAttack.classList.add("pokemon-attack");
     pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`;
 
-    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack)
+    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack);
   
 }
