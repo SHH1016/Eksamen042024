@@ -92,3 +92,6 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
     console.error("klarte ikke hente pokemon"), error;
   }
 }
+
+//Display pokemon
+
