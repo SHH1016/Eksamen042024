@@ -99,38 +99,46 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
 }
 
 //Display pokemons fra storage
-
-async function displayYourPokemons() {
+async function showYourPokemon() {
   try {
+    let yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
 
     const yourPokemonContainer = document.querySelector("#your-pokemons");
     yourPokemonContainer.innerHTML = "";
 
-    let yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+    yourPokemon.forEach(async function(pokemon){
 
-    yourPokemon.forEach((pokemon)=>{
         const pokemonCard = document.createElement("div");
         pokemonCard.classList.add("pokemon-card");
         pokemonCard.style.width = "300px";
 
-        const pokemonImage = document.createElement("img");
-        pokemonImage.classList.add("pokemon-img");
-        pokemonImage.src = pokemon.sprites.front_default;
-        pokemonImage.style.width = "200px"
+        const display = displayYourPokemons(pokemon,pokemonCard)
 
-        const pokemonName = document.createElement("h3");
-        pokemonName.classList.add("pokemon-name");
-        pokemonName.textContent = `${pokemon.name}`;
-
-        const pokemonAttack = document.createElement("h4");
-        pokemonAttack.classList.add("pokemon-attack");
-        pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`
-
-        pokemonCard.append(pokemonImage, pokemonName, pokemonAttack);
-        yourPokemonContainer.appendChild(pokemonCard);
-    })
+        pokemonCard.append(display)
+        yourPokemonContainer.appendChild(pokemonCard)
+    });
+   
   } catch (error) {
-    console.error("klarte ikke å vise frem pokemon", error);
+    console.error("klarte ikke vise frem pokemon", error);
   }
 }
-displayYourPokemons();
+showYourPokemon();
+
+function displayYourPokemons(pokemon, pokemonCard) {
+
+    const pokemonImage = document.createElement("img");
+    pokemonImage.classList.add("pokemon-img");
+    pokemonImage.src = pokemon.sprites.front_default;
+    pokemonImage.style.width = "200px";
+
+    const pokemonName = document.createElement("h3");
+    pokemonName.classList.add("pokemon-name");
+    pokemonName.textContent = `${pokemon.name}`;
+
+    const pokemonAttack = document.createElement("h4");
+    pokemonAttack.classList.add("pokemon-attack");
+    pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`;
+
+    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack)
+  
+}
