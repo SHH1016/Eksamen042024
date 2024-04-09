@@ -49,6 +49,7 @@ async function fetchAllPokemon() {
         if (randomPokemon) {
           yourPokemon.push(randomPokemon);
           //lagrer til sessionstorage
+          //fikse så den kan hente inn nye pokemon på start og låse dem
         }
       });
       sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
@@ -139,9 +140,12 @@ async function showOpponentPokemon(){
             pokemonCard.style.width = "300px";
     
             const display = displayYourPokemons(pokemon,pokemonCard)
+            //const health = pokemonHealth();
     
             pokemonCard.append(display)
             opponentsPokemonContainer.appendChild(pokemonCard)
+
+            
         });
 
     }catch (error){
@@ -165,6 +169,23 @@ function displayYourPokemons(pokemon, pokemonCard) {
     pokemonAttack.classList.add("pokemon-attack");
     pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`;
 
-    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack);
+    const healthBarContainer = document.createElement("div");
+    healthBarContainer.style.backgroundColor = "green"
+    healthBarContainer.style.width = "500px";
+    healthBarContainer.style.height ="50px";
+
+    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack, healthBarContainer);
   
+}
+//Healthbar
+function pokemonHealth (){
+
+    const newHealth = 500;
+
+    const healthBar = {
+        stats:[[0].stat.name],
+        stats:[[0].newHealth]
+    }
+
+
 }
