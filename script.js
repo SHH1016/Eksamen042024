@@ -1,9 +1,9 @@
 
 let yourPokemon = [];
-console.log(yourPokemon);
+console.log("Dine pokemons",yourPokemon);
 
 let opponentsPokemon = [];
-console.log(opponentsPokemon);
+console.log("Motstander pokemons",opponentsPokemon);
 
 let pokemonData = [];
 
@@ -27,11 +27,15 @@ async function fetchAllPokemon() {
       const randomPokemonIndex = await makeRandomIndex(pokemonData.length, 3);
       console.log(randomPokemonIndex)
 
+      let yourPokemon = JSON.parse(sessionStorage.getItem(yourPokemon)) || [];
+
       randomPokemonIndex.forEach(index => {
         const randomPokemon = pokemonData[index];
         console.log(randomPokemon);
         if(randomPokemon){
             yourPokemon.push(randomPokemon); 
+            //lagrer til sessionstorage
+            sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon))
         }
       });
       //random pokemon til opponentsPokemon Array
