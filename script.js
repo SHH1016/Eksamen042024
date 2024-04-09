@@ -8,11 +8,17 @@ let pokemonData = [];
 
 let allPokemons;
 
+const startBtn = document.querySelector("#start-game");
+
 //false/true basert på condtion
 let updatePokemons = false;
 console.log("updatePokemon", updatePokemons);
 let pokemonSavedToSession = false;
 console.log("SavedToSession", pokemonSavedToSession);
+
+startBtn.addEventListener("click", function(){
+    fetchAllPokemon();
+})
 
 async function fetchAllPokemon() {
   try {
@@ -35,6 +41,9 @@ async function fetchAllPokemon() {
     if (setYourPokemon.length === 3 && setOpponentsPokemon.length === 3) {
       yourPokemon = setYourPokemon;
       opponentsPokemon = setOpponentsPokemon;
+      showYourPokemon();
+      showOpponentPokemon();
+      
       pokemonSavedToSession = true;
       updatePokemons = false;
     } else if(!pokemonSavedToSession && updatePokemons){
@@ -52,6 +61,7 @@ async function fetchAllPokemon() {
             yourPokemon.push(randomPokemon);
             console.log(yourPokemon.length);
             sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
+            
             //lagrer til sessionstorage
             //fikse så den kan hente inn nye pokemon på start og låse dem
           }
@@ -76,35 +86,17 @@ async function fetchAllPokemon() {
               "opponentsPokemon",
               JSON.stringify(opponentsPokemon)
             );
+            
           }
         });
       }
       pokemonSavedToSession = true;
+      updatePokemons = false;
     }
     // while(!yourPokemon.length && !opponentsPokemon.length < 3){
     //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
   } catch (error) {
     console.error("Klarte ikke hente respons fra API", error);
-  }
-}
-window.onload = fetchAllPokemon();
-
-async function setPokemons() {
-  try {
-    const setYourPokemon =
-      JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
-    const setOpponentsPokemon =
-      JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
-
-    if (setYourPokemon.length === 3 && setOpponentsPokemon.length === 3) {
-      yourPokemon = setYourPokemon;
-      opponentsPokemon = setOpponentsPokemon;
-      updatePokemons = false;
-      pokemonSavedToSession = true;
-      return;
-    }
-  } catch (error) {
-    console.error("klarte ikke hente pokemon fra session storage", error);
   }
 }
 
@@ -130,7 +122,7 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
 //Display pokemons fra storage
 async function showYourPokemon() {
   try {
-    let yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+    yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
     const yourPokemonContainer = document.querySelector("#your-pokemons");
     yourPokemonContainer.innerHTML = "";
 
@@ -150,12 +142,11 @@ async function showYourPokemon() {
     console.error("klarte ikke vise frem pokemon", error);
   }
 }
-showYourPokemon();
+
 
 async function showOpponentPokemon() {
   try {
-    let opponentsPokemon =
-      JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
+      opponentsPokemon = JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
     const opponentsPokemonContainer = document.querySelector(
       "#opponents-pokemons"
     );
@@ -178,7 +169,7 @@ async function showOpponentPokemon() {
     console.error("klarte ikke vise motstander sine pokemon", error);
   }
 }
-showOpponentPokemon();
+
 
 function displayYourPokemons(pokemon, pokemonCard) {
   const pokemonImage = document.createElement("img");
