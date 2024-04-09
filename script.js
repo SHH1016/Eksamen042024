@@ -46,7 +46,7 @@ async function fetchAllPokemon() {
         const randomPokeIndexes = [];
         console.log(randomPokeIndexes);
 
-        while(randomPokeIndexes < pokeNumberIndexes){
+        while(randomPokeIndexes.length < pokeNumberIndexes){
             const randomNumberIndex = Math.floor(Math.random()* maxIndexLength);
             if(!randomPokeIndexes.includes(randomNumberIndex)){
                 randomPokeIndexes.push(randomNumberIndex);
