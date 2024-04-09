@@ -6,6 +6,8 @@ console.log("Motstander pokemons", opponentsPokemon);
 
 let pokemonData = [];
 
+let allPokemons;
+
 async function fetchAllPokemon() {
   try {
     const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
@@ -23,32 +25,39 @@ async function fetchAllPokemon() {
     console.log(randomPokemonIndex);
 
     sessionStorage.setItem("PokemonInTheGame", JSON.stringify({yourPokemon:[],opponentsPokemon:[]}))
+    //let allPokemons = JSON.parse(sessionStorage.getItem("PokemonInTheGame"));
 
-    let yourPokemon = JSON.parse(sessionStorage.getItem("PokemonInTheGame")) || [];
-    let opponentsPokemon = JSON.parse(sessionStorage.getItem("PokemonInTheGame")) || [];
+    JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+    JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
 
-    randomPokemonIndex.forEach((index) => {
-      const randomPokemon = pokemonData[index];
-      console.log(randomPokemon);
-      if (randomPokemon) {
-        yourPokemon.push(randomPokemon);
-        //lagrer til sessionstorage
-        sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
-      }
-    });
-    //random pokemon til opponentsPokemon Array
-    const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
-    console.log(randomPokemonIndex2);
+   // while(!yourPokemon.length && !opponentsPokemon.length < 3){
+        randomPokemonIndex.forEach((index) => {
+            const randomPokemon = pokemonData[index];
+            console.log(randomPokemon);
+            if (randomPokemon) {
+              yourPokemon.push(randomPokemon);
+              //lagrer til sessionstorage
+            }
+          });
+          sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
+          //random pokemon til opponentsPokemon Array
+          const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
+          console.log(randomPokemonIndex2);
+      
+          randomPokemonIndex2.forEach((index) => {
+            const randomPokemon2 = pokemonData[index];
+            console.log(randomPokemon2);
+            if (randomPokemon2) {
+          
+              opponentsPokemon.push(randomPokemon2);
+              //lagrer til sessionstorage
+            }
+          });
+          sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
+    
 
-    randomPokemonIndex2.forEach((index) => {
-      const randomPokemon2 = pokemonData[index];
-      console.log(randomPokemon2);
-      if (randomPokemon2) {
-        opponentsPokemon.push(randomPokemon2);
-        //lagrer til sessionstorage
-        sessionStorage.setItem("opponentsPokemon", JSON.stringify(opponentsPokemon));
-      }
-    });
+    
+
   } catch (error) {
     console.error("Klarte ikke hente respons fra API", error);
   }
