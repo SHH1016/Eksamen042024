@@ -174,19 +174,12 @@ function displayYourPokemons(pokemon, pokemonCard) {
     healthBarContainer.style.width = "500px";
     healthBarContainer.style.height ="50px";
 
-    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack, healthBarContainer);
+    const healtBarName = document.createElement("h4");
+    healtBarName.textContent = `${pokemon.stats[0].stat.name}`;
+    const healthBarText = document.createElement("h4");
+    const health = 1000;
+    healthBarText.textContent = `${health}`;
+
+    pokemonCard.append(pokemonImage, pokemonName, pokemonAttack, healthBarContainer, healtBarName,healthBarText);
   
-}
-//Healthbar
-function pokemonHealth (){
-
-    const newHealth = 500;
-
-    const healthBar = {
-        stats:[[0].stat.name],
-        stats:[[0].newHealth]
-    }
-
-    yourPokemon.unshift(healthBar);
-
 }
