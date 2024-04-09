@@ -107,7 +107,7 @@ async function showYourPokemon() {
     const yourPokemonContainer = document.querySelector("#your-pokemons");
     yourPokemonContainer.innerHTML = "";
 
-    yourPokemon.forEach(async function(pokemon){
+    yourPokemon.forEach(async function(pokemon, index){
         console.log(pokemon)
 
         const pokemonCard = document.createElement("div");
@@ -132,7 +132,7 @@ async function showOpponentPokemon(){
         const opponentsPokemonContainer = document.querySelector("#opponents-pokemons");
         opponentsPokemonContainer.innerHTML="";
 
-            opponentsPokemon.forEach(async function(pokemon){
+            opponentsPokemon.forEach(async function(pokemon, index){
             console.log(pokemon)
     
             const pokemonCard = document.createElement("div");
