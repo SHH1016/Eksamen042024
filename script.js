@@ -3,6 +3,7 @@ let yourPokemon = [];
 console.log(yourPokemon);
 
 let opponentsPokemon = [];
+console.log(opponentsPokemon);
 
 let pokemonData = [];
 
@@ -22,6 +23,7 @@ async function fetchAllPokemon() {
       pokemonData = await Promise.all(pokemons);
       console.log(pokemonData);
       
+      //random pokemin til yourPokemon Array
       const randomPokemonIndex = await makeRandomIndex(pokemonData.length, 3);
       console.log(randomPokemonIndex)
 
@@ -29,10 +31,22 @@ async function fetchAllPokemon() {
         const randomPokemon = pokemonData[index];
         console.log(randomPokemon);
         if(randomPokemon){
-            yourPokemon.push(randomPokemon);  
+            yourPokemon.push(randomPokemon); 
         }
       });
-      
+      //random pokemon til opponentsPokemon Array
+      const randomPokemonIndex2 = await makeRandomIndex(pokemonData.length, 3);
+      console.log(randomPokemonIndex2);
+
+      randomPokemonIndex2.forEach(index =>{
+        const randomPokemon2 = pokemonData[index];
+        console.log(randomPokemon2);
+        if(randomPokemon2){
+            opponentsPokemon.push(randomPokemon2);
+        }
+      })
+
+     
     } catch (error) {
       console.error("Klarte ikke hente respons fra API", error);
     }
@@ -58,10 +72,6 @@ async function fetchAllPokemon() {
         console.error("klarte ikke hente pokemon"),error;
     }
     
-  }
-
-  function randomLength(maxIndexLength){
-    return Math.floor(Math.random()* maxIndexLength)
   }
 
   
