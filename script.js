@@ -16,40 +16,42 @@ console.log("updatePokemon", updatePokemons);
 let pokemonSavedToSession = false;
 console.log("SavedToSession", pokemonSavedToSession);
 
-startBtn.addEventListener("click", function(){
-    fetchAllPokemon();
-})
+startBtn.addEventListener("click", function () {
+  fetchAllPokemon();
+});
 
 async function fetchAllPokemon() {
   try {
-    const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon?limit=100"
-      );
-      const data = await response.json();
-      const pokemons = data.results.map(async function (pokemon) {
-        const response = await fetch(pokemon.url);
-        return response.json();
-      });
-      pokemonData = await Promise.all(pokemons);
-      console.log(pokemonData);
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
+    const data = await response.json();
+    const pokemons = data.results.map(async function (pokemon) {
+      const response = await fetch(pokemon.url);
+      return response.json();
+    });
+    pokemonData = await Promise.all(pokemons);
+    console.log(pokemonData);
 
     const setYourPokemon =
       JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
     const setOpponentsPokemon =
       JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
-      //Har måttet debugge mye chatgpt da det ikke funket som jeg tenkte og flyttet funksjon opp her
+    //Har måttet debugge mye chatgpt da det ikke funket som jeg tenkte og flyttet funksjon opp her
     if (setYourPokemon.length === 3 && setOpponentsPokemon.length === 3) {
       yourPokemon = setYourPokemon;
       opponentsPokemon = setOpponentsPokemon;
-      showYourPokemon();
-      showOpponentPokemon();
-      
+
+      const yourPokemonObject1 = yourPokemon[0];
+      const opponentsPokemonObject1 = opponentsPokemon[0];
+
+      showYourPokemon(yourPokemonObject1);
+      showOpponentPokemon(opponentsPokemonObject1);
+
       pokemonSavedToSession = true;
       updatePokemons = false;
-    } else if(!pokemonSavedToSession && updatePokemons){
-        yourPokemon = setYourPokemon;
-        opponentsPokemon = setOpponentsPokemon;
-    }else{
+    } else if (!pokemonSavedToSession && updatePokemons) {
+      yourPokemon = setYourPokemon;
+      opponentsPokemon = setOpponentsPokemon;
+    } else {
       //random pokemon til yourPokemon Array
       const randomPokemonIndex = await makeRandomIndex(pokemonData.length, 3);
       console.log(randomPokemonIndex);
@@ -61,7 +63,7 @@ async function fetchAllPokemon() {
             yourPokemon.push(randomPokemon);
             console.log(yourPokemon.length);
             sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
-            
+
             //lagrer til sessionstorage
             //fikse så den kan hente inn nye pokemon på start og låse dem
           }
@@ -86,7 +88,6 @@ async function fetchAllPokemon() {
               "opponentsPokemon",
               JSON.stringify(opponentsPokemon)
             );
-            
           }
         });
       }
@@ -120,56 +121,53 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
 }
 
 //Display pokemons fra storage
-async function showYourPokemon() {
+async function showYourPokemon(index) {
   try {
-    yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [];
+    yourPokemon = JSON.parse(sessionStorage.getItem("yourPokemon")) || [index];
+    const pokemon = index;
+    console.log(pokemon);
+
     const yourPokemonContainer = document.querySelector("#your-pokemons");
     yourPokemonContainer.innerHTML = "";
 
-    yourPokemon.forEach(async function (pokemon, index) {
-      //console.log(pokemon)
+    const pokemonCard = document.createElement("div");
+    pokemonCard.classList.add("pokemon-card");
+    pokemonCard.style.width = "300px";
 
-      const pokemonCard = document.createElement("div");
-      pokemonCard.classList.add("pokemon-card");
-      pokemonCard.style.width = "300px";
+    const display = displayYourPokemons(pokemon, pokemonCard);
 
-      const display = displayYourPokemons(pokemon, pokemonCard);
-
-      pokemonCard.append(display);
-      yourPokemonContainer.appendChild(pokemonCard);
-    });
+    pokemonCard.append(display);
+    yourPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise frem pokemon", error);
   }
 }
 
-
-async function showOpponentPokemon() {
+async function showOpponentPokemon(index) {
   try {
-      opponentsPokemon = JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [];
+    opponentsPokemon = JSON.parse(
+      sessionStorage.getItem("opponentsPokemon")
+    ) || [index];
+    const pokemon = index;
+    console.log(pokemon);
+
     const opponentsPokemonContainer = document.querySelector(
       "#opponents-pokemons"
     );
     opponentsPokemonContainer.innerHTML = "";
 
-    opponentsPokemon.forEach(async function (pokemon, index) {
-      console.log(pokemon);
+    const pokemonCard = document.createElement("div");
+    pokemonCard.classList.add("pokemon-card");
+    pokemonCard.style.width = "300px";
 
-      const pokemonCard = document.createElement("div");
-      pokemonCard.classList.add("pokemon-card");
-      pokemonCard.style.width = "300px";
+    const display = displayYourPokemons(pokemon, pokemonCard);
 
-      const display = displayYourPokemons(pokemon, pokemonCard);
-      //const health = pokemonHealth();
-
-      pokemonCard.append(display);
-      opponentsPokemonContainer.appendChild(pokemonCard);
-    });
+    pokemonCard.append(display);
+    opponentsPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise motstander sine pokemon", error);
   }
 }
-
 
 function displayYourPokemons(pokemon, pokemonCard) {
   const pokemonImage = document.createElement("img");
@@ -191,7 +189,7 @@ function displayYourPokemons(pokemon, pokemonCard) {
   healthBarContainer.style.height = "50px";
 
   const healtBarName = document.createElement("h4");
-  healtBarName.textContent = `${pokemon.stats[0].stat.name}`;
+  healtBarName.textContent = `${pokemon.stats[0].stat.name}:`;
   const healthBarText = document.createElement("h4");
   const health = 1000;
   healthBarText.textContent = `${health}`;
@@ -200,8 +198,8 @@ function displayYourPokemons(pokemon, pokemonCard) {
     pokemonImage,
     pokemonName,
     pokemonAttack,
-    healthBarContainer,
     healtBarName,
-    healthBarText
+    healthBarText,
+    healthBarContainer
   );
 }
