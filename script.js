@@ -231,29 +231,46 @@ healthBarContainer2.style.height = "50px";
 
 async function attackOpponent() {
   try {
+    //dine pokemon
     JSON.parse(sessionStorage.getItem("yourPokemon")) || [0];
-    console.log(yourPokemon[0].stats[0].base_stat);
+        console.log(yourPokemon[0].stats[0].base_stat);
+        let attackStat = parseInt(yourPokemon[0].stats[1].base_stat);
+        console.log(attackStat)
+        let healthStat = parseInt(yourPokemon[0].stats[0].base_stat);
+        console.log(healthStat);
 
-    const attackStat = yourPokemon[0].stats[1].base_stat;
-    console.log(attackStat)
-    const healthStat = yourPokemon[0].stats[0].base_stat;
-    console.log(healthStat);
+    //motstander pokemon
+    JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
+        console.log(opponentsPokemon[0].stats[0].base_stat)
+        let attackStatOpponent = parseInt(opponentsPokemon[0].stats[1].base_stat);
+        console.log(attackStatOpponent)
+        let healthStatOpponent = parseInt(opponentsPokemon[0].stats[0].base_stat);
+        console.log(healthStatOpponent);
 
     //angrep
-    if(healthStat <= 0){
-        yourPokemon.shift();
-        sessionStorage.setItem("yourPokemon",JSON.stringify(yourPokemon))
+    if(healthStat < 0){
 
-        if(yourPokemon.length < 2){
-            const yourPokemonNext = yourPokemon[0];
-            await showOpponentPokemon(yourPokemonNext);
-        }
-    }else{
-        
+        let newHealt = healthStatOpponent -= attackStat;
+        console.log(newHealt)
 
+        if(newHealt <= 0){
+            opponentsPokemon.shift();
+            sessionStorage.setItem("opponentsPokemon",JSON.stringify(opponentsPokemon))
+            console.log(opponentsPokemon);
+    
+            if(yourPokemon.length > 0){
+                const opponentsPokemonNext = opponentsPokemon[0];
+                await showOpponentPokemon(opponentsPokemonNext);
+            }else{
+                alert("Gratulerer du har vunnet!");
+            }
+
+         }
+   
     }
+    //else{///condtion på hvis pokemon har blitt angrepet tilbake }
 
-    await opponentsAttack()
+   // await opponentsAttack()
   } catch (error) {
     console.error("opps noe gikk galt i attackOpponent", error);
   }
