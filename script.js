@@ -255,11 +255,13 @@ async function attackOpponent() {
     if (/*healthStat > 0 &&*/ opponentsHealthWidth > 0) {
       //healthbar motstander
       let newWidthHealth = (opponentsHealthWidth -= attackStat);
-      console.log(newWidthHealth);
+      console.log(newWidthHealth +"px");
       healthBarContainer1.style.width = newWidthHealth + "px";
      
       //neste angrep om ikke pokemon sin helse er under 0
       let nextAttack = (newWidthHealth -= attackStat);
+      console.log(nextAttack);
+
       if (/*newHealt <= 0*/ opponentsHealthWidth <= 0) {
         opponentsPokemon.shift();
         sessionStorage.setItem(
@@ -276,7 +278,7 @@ async function attackOpponent() {
         } else if (opponentsPokemon.length <= 0) {
           alert("Gratulerer du har vunnet!");
           fetchAllPokemon();
-          healthBarContainer1.style.width = "200px";
+          //healthBarContainer1.style.width = "200px";
         }
       } else if (/*newHealt > 1*/ opponentsHealthWidth > 1) {
         nextAttack;
@@ -307,16 +309,17 @@ async function opponentsAttack() {
     console.log(healthStatOpponent);
 
     let yourHealthWidt = parseInt(healthBarContainer2.style.width);
-    console.log(yourHealthWidt + "px");
+    console.log(yourHealthWidt+"px");
 
     if (/*healthStat > 0 &&*/ yourHealthWidt > 0) {
         //healthbar
         let newYourHealthWidth = (yourHealthWidt -= attackStatOpponent);
-        console.log(newYourHealthWidth);
+        console.log(newYourHealthWidth+ "px");
         healthBarContainer2.style.width = newYourHealthWidth + "px";
   
         //neste angrep om ikke pokemon sin helse er under 0
         let yourNextAttack = (newYourHealthWidth -= attackStatOpponent);
+        console.log(yourNextAttack);
   
         if (/*newHealt <= 0*/ yourHealthWidt <= 0) {
             yourPokemon.shift();
@@ -333,7 +336,9 @@ async function opponentsAttack() {
             healthBarContainer2.style.width = "200px";
           } else if (yourPokemon.length <= 0) {
             alert("Dessverre ble det tap!");
-            fetchAllPokemon();
+            //fetchAllPokemon();
+            alert("refresh siden for å starte på nytt");
+            //healthBarContainer2.style.width = "200px";
           }
         } else if (/*newHealt > 1*/ yourHealthWidt > 1) {
           yourNextAttack;
