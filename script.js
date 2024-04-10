@@ -212,6 +212,7 @@ function displayYourPokemons(pokemon, pokemonCard) {
 }
 
 attackBtn.addEventListener("click", function () {
+  opponentsAttack();
   attackOpponent();
 });
 //Helsebaren for din pokemon og motstander sin pokemon
@@ -233,80 +234,114 @@ async function attackOpponent() {
   try {
     //dine pokemon
     JSON.parse(sessionStorage.getItem("yourPokemon")) || [0];
-        console.log(yourPokemon[0].stats[0].base_stat);
-        let attackStat = parseInt(yourPokemon[0].stats[1].base_stat);
-        console.log(attackStat)
-        let healthStat = parseInt(yourPokemon[0].stats[0].base_stat);
-        console.log(healthStat);
+    console.log(yourPokemon[0].stats[0].base_stat);
+    let attackStat = parseInt(yourPokemon[0].stats[1].base_stat);
+    console.log(attackStat);
+    let healthStat = parseInt(yourPokemon[0].stats[0].base_stat);
+    console.log(healthStat);
 
     //motstander pokemon
     JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
-        console.log(opponentsPokemon[0].stats[0].base_stat)
-        let attackStatOpponent = parseInt(opponentsPokemon[0].stats[1].base_stat);
-        console.log(attackStatOpponent)
-        let healthStatOpponent = parseInt(opponentsPokemon[0].stats[0].base_stat);
-        console.log(healthStatOpponent);
+    console.log(opponentsPokemon[0].stats[0].base_stat);
+    let attackStatOpponent = parseInt(opponentsPokemon[0].stats[1].base_stat);
+    console.log(attackStatOpponent);
+    let healthStatOpponent = parseInt(opponentsPokemon[0].stats[0].base_stat);
+    console.log(healthStatOpponent);
 
     //angrep
     let opponentsHealthWidth = parseInt(healthBarContainer1.style.width);
     console.log(opponentsHealthWidth + "px");
 
-    if(/*healthStat > 0 &&*/ opponentsHealthWidth > 0){
+    if (/*healthStat > 0 &&*/ opponentsHealthWidth > 0) {
+      //healthbar motstander
+      let newWidthHealth = (opponentsHealthWidth -= attackStat);
+      console.log(newWidthHealth);
+      healthBarContainer1.style.width = newWidthHealth + "px";
+     
+      //neste angrep om ikke pokemon sin helse er under 0
+      let nextAttack = (newWidthHealth -= attackStat);
+      if (/*newHealt <= 0*/ opponentsHealthWidth <= 0) {
+        opponentsPokemon.shift();
+        sessionStorage.setItem(
+          "opponentsPokemon",
+          JSON.stringify(opponentsPokemon)
+        );
+        console.log(opponentsPokemon);
 
-        /*let newHealt = healthStatOpponent -= attackStat;
-        console.log(newHealt)*/
-
-        //healthbar
-       let newWidthHealth = opponentsHealthWidth -= attackStat;
-       console.log(newWidthHealth)
-        healthBarContainer1.style.width = newWidthHealth +"px";
-        
-        //neste angrep om ikke pokemon sin helse er over 0
-        let nextAttack = newWidthHealth -= attackStat;
-
-        if(/*newHealt <= 0*/opponentsHealthWidth <= 0){
-            opponentsPokemon.shift();
-            sessionStorage.setItem("opponentsPokemon",JSON.stringify(opponentsPokemon))
-            console.log(opponentsPokemon);
-    
-            if(opponentsPokemon.length > 0){
-                JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
-                const opponentsPokemonNext = opponentsPokemon[0];
-                await showOpponentPokemon(opponentsPokemonNext);
-                healthBarContainer1.style.width = "200px";
-            }else if(opponentsPokemon.length <= 0){
-                alert("Gratulerer du har vunnet!");
-                fetchAllPokemon();
-
-            }
-
-        }else if(/*newHealt > 1*/opponentsHealthWidth > 1){
-           nextAttack;
-           healthBarContainer1.style.width = nextAttack-"px";
+        if (opponentsPokemon.length > 0) {
+          JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
+          const opponentsPokemonNext = opponentsPokemon[0];
+          await showOpponentPokemon(opponentsPokemonNext);
+          healthBarContainer1.style.width = "200px";
+        } else if (opponentsPokemon.length <= 0) {
+          alert("Gratulerer du har vunnet!");
+          fetchAllPokemon();
+          healthBarContainer1.style.width = "200px";
         }
-   
+      } else if (/*newHealt > 1*/ opponentsHealthWidth > 1) {
+        nextAttack;
+        healthBarContainer1.style.width = nextAttack - "px";
+      }
     }
-    //else{///condtion på hvis pokemon har blitt angrepet tilbake }
-
-   // await opponentsAttack()
+   
+   
   } catch (error) {
     console.error("opps noe gikk galt i attackOpponent", error);
   }
 }
 
 async function opponentsAttack() {
-    try{
-        JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
-        console.log(opponentsPokemon[0].stats[0].base_stat)
-        const attackStatOpponent = opponentsPokemon[0].stats[1].base_stat;
-        console.log(attackStatOpponent)
-        const healthStatOpponent = opponentsPokemon[0].stats[0].base_stat;
-        console.log(healthStatOpponent);
+  try {
+    JSON.parse(sessionStorage.getItem("yourPokemon")) || [0];
+    console.log(yourPokemon[0].stats[0].base_stat);
+    let attackStat = parseInt(yourPokemon[0].stats[1].base_stat);
+    console.log(attackStat);
+    let healthStat = parseInt(yourPokemon[0].stats[0].base_stat);
+    console.log(healthStat);
 
-    }catch(error){
-        console.error("opps noe gikk galt i opponentsAttack",error)
+    JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
+    console.log(opponentsPokemon[0].stats[0].base_stat);
+    const attackStatOpponent = opponentsPokemon[0].stats[1].base_stat;
+    console.log(attackStatOpponent);
+    const healthStatOpponent = opponentsPokemon[0].stats[0].base_stat;
+    console.log(healthStatOpponent);
 
-    }
+    let yourHealthWidt = parseInt(healthBarContainer2.style.width);
+    console.log(yourHealthWidt + "px");
+
+    if (/*healthStat > 0 &&*/ yourHealthWidt > 0) {
+        //healthbar
+        let newYourHealthWidth = (yourHealthWidt -= attackStatOpponent);
+        console.log(newYourHealthWidth);
+        healthBarContainer2.style.width = newYourHealthWidth + "px";
+  
+        //neste angrep om ikke pokemon sin helse er under 0
+        let yourNextAttack = (newYourHealthWidth -= attackStatOpponent);
+  
+        if (/*newHealt <= 0*/ yourHealthWidt <= 0) {
+            yourPokemon.shift();
+          sessionStorage.setItem(
+            "yourPokemon",
+            JSON.stringify(yourPokemon)
+          );
+          console.log(yourPokemon);
+  
+          if (yourPokemon.length > 0) {
+            JSON.parse(sessionStorage.getItem("")) || [0];
+            const yourPokemonNext = yourPokemon[0];
+            await showYourPokemon(yourPokemonNext);
+            healthBarContainer2.style.width = "200px";
+          } else if (yourPokemon.length <= 0) {
+            alert("Dessverre ble det tap!");
+            fetchAllPokemon();
+          }
+        } else if (/*newHealt > 1*/ yourHealthWidt > 1) {
+          yourNextAttack;
+          healthBarContainer2.style.width = yourNextAttack - "px";
+        }
+      }
+
+  } catch (error) {
+    console.error("opps noe gikk galt i yourAttack", error);
+  }
 }
-
-    
