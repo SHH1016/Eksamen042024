@@ -9,6 +9,7 @@ let pokemonData = [];
 let allPokemons;
 
 const startBtn = document.querySelector("#start-game");
+const attackBtn = document.querySelector("#attack-btn");
 
 //false/true basert på condtion
 let updatePokemons = false;
@@ -94,6 +95,7 @@ async function fetchAllPokemon() {
       pokemonSavedToSession = true;
       updatePokemons = false;
     }
+
     // while(!yourPokemon.length && !opponentsPokemon.length < 3){
     //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
   } catch (error) {
@@ -135,14 +137,16 @@ async function showYourPokemon(index) {
     pokemonCard.style.width = "300px";
 
     const display = displayYourPokemons(pokemon, pokemonCard);
-
+    /*
     const healthBarContainer = document.querySelector("#your-pokemon-healthbar");
     healthBarContainer.style.backgroundColor = "green";
     healthBarContainer.style.width = "500px";
     //updateHealth(healthBarContainer, pokemon);
     healthBarContainer.style.height = "50px";
+    */
+    const pokeHealth = 500;
 
-    pokemonCard.append(display, healthBarContainer);
+    pokemonCard.append(display);
     yourPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise frem pokemon", error);
@@ -166,15 +170,18 @@ async function showOpponentPokemon(index) {
     pokemonCard.classList.add("pokemon-card");
     pokemonCard.style.width = "300px";
 
+    /*
     const healthBarContainer = document.querySelector("#opponents-pokemons-healthbar")
     healthBarContainer.style.backgroundColor = "green";
     healthBarContainer.style.width = "500px";
     //updateHealth(healthBarContainer, pokemon);
     healthBarContainer.style.height = "50px";
+    */
+    const pokeHealth = 500;
 
     const display = displayYourPokemons(pokemon, pokemonCard);
 
-    pokemonCard.append(display,healthBarContainer);
+    pokemonCard.append(display);
     opponentsPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise motstander sine pokemon", error);
@@ -196,33 +203,52 @@ function displayYourPokemons(pokemon, pokemonCard) {
   pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`;
 
   const healtBarName = document.createElement("h4");
-  healtBarName.textContent = `${pokemon.stats[0].stat.name}:`;
+  healtBarName.textContent = `${pokemon.stats[0].stat.name}:${pokemon.stats[0].base_stat}`;
   const healthBarText = document.createElement("h4");
-  const health = 1000;
-  healthBarText.textContent = `${health}`;
+  const healthTxt = 500;
+  healthBarText.textContent = `${healthTxt}`;
 
-  pokemonCard.append(
-    pokemonImage,
-    pokemonName,
-    pokemonAttack,
-    healtBarName,
-    healthBarText
-  );
+  pokemonCard.append(pokemonImage, pokemonName, pokemonAttack, healtBarName);
 }
 
-function updateHealth(index){
-    console.log(index)
+attackBtn.addEventListener("click", function () {
+  attackOpponent();
+});
+//Helsebaren for din pokemon og motstander sin pokemon
+const healthBarContainer1 = document.querySelector(
+  "#opponents-pokemons-healthbar"
+);
+healthBarContainer1.style.backgroundColor = "green";
+healthBarContainer1.style.width = "500px";
+//updateHealth(healthBarContainer, pokemon);
+healthBarContainer1.style.height = "50px";
 
-    const pokemonNewHealth = ` ${SumHealthPx} -= ${index.stats[1].base_stat}`
-    const SumHealthPx = 500;
-    healthBarContainer.style.width = "${pokemonNewHealth}-px";
+const healthBarContainer2 = document.querySelector("#your-pokemon-healthbar");
+healthBarContainer2.style.backgroundColor = "green";
+healthBarContainer2.style.width = "500px";
+//updateHealth(healthBarContainer, pokemon);
+healthBarContainer2.style.height = "50px";
 
+async function attackOpponent() {
+  try {
+    JSON.parse(sessionStorage.getItem("yourPokemon")) || [0];
+    console.log(yourPokemon[0].stats[0].base_stat);
+
+    await opponentsAttack()
+  } catch (error) {
+    console.error("opps noe gikk galt i attackOpponent", error);
+  }
 }
 
-async function attackOpponent(){
+async function opponentsAttack() {
+    try{
+        JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
+        console.log(opponentsPokemon[0].stats[0].base_stat)
+
+    }catch(error){
+        console.error("opps noe gikk galt i opponentsAttack",error)
+
+    }
+}
 
     
-}
-//if(yourPokemon[0].health <= 0){
-
-//}
