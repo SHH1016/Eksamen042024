@@ -252,20 +252,24 @@ async function attackOpponent() {
 
         let newHealt = healthStatOpponent -= attackStat;
         console.log(newHealt)
+        let nextAttack = newHealt -= attackStat;
 
         if(newHealt <= 0){
             opponentsPokemon.shift();
             sessionStorage.setItem("opponentsPokemon",JSON.stringify(opponentsPokemon))
             console.log(opponentsPokemon);
     
-            if(yourPokemon.length > 0){
+            if(opponentsPokemon.length > 0){
+                JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
                 const opponentsPokemonNext = opponentsPokemon[0];
                 await showOpponentPokemon(opponentsPokemonNext);
-            }else{
+            }else if(opponentsPokemon.length < 0){
                 alert("Gratulerer du har vunnet!");
             }
 
-         }
+        }else if(newHealt >= 0){
+            nextAttack;
+        }
    
     }
     //else{///condtion på hvis pokemon har blitt angrepet tilbake }
