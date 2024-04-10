@@ -2,5 +2,5 @@
     display: flex;
 }
 #section-yourPokemon{
-    flex: 1;
+    width: 60%;
 }
