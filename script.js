@@ -268,6 +268,8 @@ async function attackOpponent() {
                 await showOpponentPokemon(opponentsPokemonNext);
             }else if(opponentsPokemon.length <= 0){
                 alert("Gratulerer du har vunnet!");
+                fetchAllPokemon();
+
             }
 
         }else if(newHealt >= 0){
