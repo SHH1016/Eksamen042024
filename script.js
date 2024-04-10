@@ -219,13 +219,13 @@ const healthBarContainer1 = document.querySelector(
   "#opponents-pokemons-healthbar"
 );
 healthBarContainer1.style.backgroundColor = "green";
-healthBarContainer1.style.width = "200px";
+healthBarContainer1.style.width = "150px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer1.style.height = "50px";
 
 const healthBarContainer2 = document.querySelector("#your-pokemon-healthbar");
 healthBarContainer2.style.backgroundColor = "green";
-healthBarContainer2.style.width = "200px";
+healthBarContainer2.style.width = "150px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer2.style.height = "50px";
 
@@ -252,6 +252,9 @@ async function attackOpponent() {
 
         let newHealt = healthStatOpponent -= attackStat;
         console.log(newHealt)
+        //healthbar
+        healthBarContainer1.style.width = `${newHealt}-xp`;
+        //neste angrep om ikke pokemon sin helse er over 0
         let nextAttack = newHealt -= attackStat;
 
         if(newHealt <= 0){
@@ -263,12 +266,12 @@ async function attackOpponent() {
                 JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
                 const opponentsPokemonNext = opponentsPokemon[0];
                 await showOpponentPokemon(opponentsPokemonNext);
-            }else if(opponentsPokemon.length < 0){
+            }else if(opponentsPokemon.length <= 0){
                 alert("Gratulerer du har vunnet!");
             }
 
         }else if(newHealt >= 0){
-            nextAttack;
+           nextAttack;
         }
    
     }
