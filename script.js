@@ -219,13 +219,13 @@ const healthBarContainer1 = document.querySelector(
   "#opponents-pokemons-healthbar"
 );
 healthBarContainer1.style.backgroundColor = "green";
-healthBarContainer1.style.width = "150px";
+healthBarContainer1.style.width = "200px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer1.style.height = "50px";
 
 const healthBarContainer2 = document.querySelector("#your-pokemon-healthbar");
 healthBarContainer2.style.backgroundColor = "green";
-healthBarContainer2.style.width = "150px";
+healthBarContainer2.style.width = "200px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer2.style.height = "50px";
 
@@ -248,16 +248,23 @@ async function attackOpponent() {
         console.log(healthStatOpponent);
 
     //angrep
-    if(healthStat > 0){
+    let opponentsHealthWidth = parseInt(healthBarContainer1.style.width);
+    console.log(opponentsHealthWidth + "px");
 
-        let newHealt = healthStatOpponent -= attackStat;
-        console.log(newHealt)
+    if(/*healthStat > 0 &&*/ opponentsHealthWidth > 0){
+
+        /*let newHealt = healthStatOpponent -= attackStat;
+        console.log(newHealt)*/
+
         //healthbar
-        healthBarContainer1.style.width = `${newHealt}-xp`;
+       let newWidthHealth = opponentsHealthWidth -= attackStat;
+       console.log(newWidthHealth)
+        healthBarContainer1.style.width = newWidthHealth +"px";
+        
         //neste angrep om ikke pokemon sin helse er over 0
-        let nextAttack = newHealt -= attackStat;
+        let nextAttack = newWidthHealth -= attackStat;
 
-        if(newHealt <= 0){
+        if(/*newHealt <= 0*/opponentsHealthWidth <= 0){
             opponentsPokemon.shift();
             sessionStorage.setItem("opponentsPokemon",JSON.stringify(opponentsPokemon))
             console.log(opponentsPokemon);
@@ -266,14 +273,16 @@ async function attackOpponent() {
                 JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
                 const opponentsPokemonNext = opponentsPokemon[0];
                 await showOpponentPokemon(opponentsPokemonNext);
+                healthBarContainer1.style.width = "200px";
             }else if(opponentsPokemon.length <= 0){
                 alert("Gratulerer du har vunnet!");
                 fetchAllPokemon();
 
             }
 
-        }else if(newHealt >= 0){
+        }else if(/*newHealt > 1*/opponentsHealthWidth > 1){
            nextAttack;
+           healthBarContainer1.style.width = nextAttack-"px";
         }
    
     }
