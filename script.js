@@ -186,6 +186,7 @@ function displayYourPokemons(pokemon, pokemonCard) {
   const healthBarContainer = document.createElement("div");
   healthBarContainer.style.backgroundColor = "green";
   healthBarContainer.style.width = "500px";
+
   healthBarContainer.style.height = "50px";
 
   const healtBarName = document.createElement("h4");
@@ -203,3 +204,5 @@ function displayYourPokemons(pokemon, pokemonCard) {
     healthBarContainer
   );
 }
+
+
