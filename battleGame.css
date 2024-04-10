@@ -4,3 +4,14 @@
 #section-yourPokemon{
     width: 60%;
 }
+#attack-btn-container{
+    display: flex;
+    justify-content: center;
+    
+}
+#attack-btn{
+    background-color: lightgreen;
+    height: 30px;
+    width: 100px;
+}
+
