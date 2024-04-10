@@ -219,13 +219,13 @@ const healthBarContainer1 = document.querySelector(
   "#opponents-pokemons-healthbar"
 );
 healthBarContainer1.style.backgroundColor = "green";
-healthBarContainer1.style.width = "500px";
+healthBarContainer1.style.width = "200px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer1.style.height = "50px";
 
 const healthBarContainer2 = document.querySelector("#your-pokemon-healthbar");
 healthBarContainer2.style.backgroundColor = "green";
-healthBarContainer2.style.width = "500px";
+healthBarContainer2.style.width = "200px";
 //updateHealth(healthBarContainer, pokemon);
 healthBarContainer2.style.height = "50px";
 
@@ -233,6 +233,11 @@ async function attackOpponent() {
   try {
     JSON.parse(sessionStorage.getItem("yourPokemon")) || [0];
     console.log(yourPokemon[0].stats[0].base_stat);
+
+    const attackStat = yourPokemon[0].stats[1].base_stat;
+    console.log(attackStat)
+    const healthStat = yourPokemon[0].stats[0].base_stat;
+    console.log(healthStat);
 
     await opponentsAttack()
   } catch (error) {
@@ -244,6 +249,10 @@ async function opponentsAttack() {
     try{
         JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
         console.log(opponentsPokemon[0].stats[0].base_stat)
+        const attackStatOpponent = opponentsPokemon[0].stats[1].base_stat;
+        console.log(attackStat)
+        const healthStatOpponent = opponentsPokemon[0].stats[0].base_stat;
+        console.log(healthStat);
 
     }catch(error){
         console.error("opps noe gikk galt i opponentsAttack",error)
