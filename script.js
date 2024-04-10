@@ -136,7 +136,13 @@ async function showYourPokemon(index) {
 
     const display = displayYourPokemons(pokemon, pokemonCard);
 
-    pokemonCard.append(display);
+    const healthBarContainer = document.createElement("div");
+    healthBarContainer.style.backgroundColor = "green";
+    healthBarContainer.style.width = "500px";
+    updateHealth(healthBarContainer, pokemon);
+    healthBarContainer.style.height = "50px";
+
+    pokemonCard.append(display, healthBarContainer);
     yourPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise frem pokemon", error);
@@ -160,9 +166,15 @@ async function showOpponentPokemon(index) {
     pokemonCard.classList.add("pokemon-card");
     pokemonCard.style.width = "300px";
 
+    const healthBarContainer = document.createElement("div");
+    healthBarContainer.style.backgroundColor = "green";
+    healthBarContainer.style.width = "500px";
+    updateHealth(healthBarContainer, pokemon);
+    healthBarContainer.style.height = "50px";
+
     const display = displayYourPokemons(pokemon, pokemonCard);
 
-    pokemonCard.append(display);
+    pokemonCard.append(display,healthBarContainer);
     opponentsPokemonContainer.appendChild(pokemonCard);
   } catch (error) {
     console.error("klarte ikke vise motstander sine pokemon", error);
@@ -183,12 +195,6 @@ function displayYourPokemons(pokemon, pokemonCard) {
   pokemonAttack.classList.add("pokemon-attack");
   pokemonAttack.textContent = `${pokemon.stats[1].stat.name} : ${pokemon.stats[1].base_stat}`;
 
-  const healthBarContainer = document.createElement("div");
-  healthBarContainer.style.backgroundColor = "green";
-  healthBarContainer.style.width = "500px";
-
-  healthBarContainer.style.height = "50px";
-
   const healtBarName = document.createElement("h4");
   healtBarName.textContent = `${pokemon.stats[0].stat.name}:`;
   const healthBarText = document.createElement("h4");
@@ -200,9 +206,15 @@ function displayYourPokemons(pokemon, pokemonCard) {
     pokemonName,
     pokemonAttack,
     healtBarName,
-    healthBarText,
-    healthBarContainer
+    healthBarText
   );
 }
 
+function updateHealth(healthBarContainer, index){
+    console.log()
 
+    const pokemonNewHealth = `${index.stats[1].base_stat} -= ${SumHealthPx}`
+    const SumHealthPx = 500;
+    healthBarContainer.style.width = "${pokemonNewHealth}-px";
+
+}
