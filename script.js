@@ -248,7 +248,7 @@ async function attackOpponent() {
         console.log(healthStatOpponent);
 
     //angrep
-    if(healthStat < 0){
+    if(healthStat > 0){
 
         let newHealt = healthStatOpponent -= attackStat;
         console.log(newHealt)
