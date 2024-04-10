@@ -336,7 +336,7 @@ async function opponentsAttack() {
             healthBarContainer2.style.width = "200px";
           } else if (yourPokemon.length <= 0) {
             alert("Dessverre ble det tap!");
-            //fetchAllPokemon();
+            fetchAllPokemon();
             alert("refresh siden for å starte på nytt");
             //healthBarContainer2.style.width = "200px";
           }
