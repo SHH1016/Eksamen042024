@@ -239,6 +239,20 @@ async function attackOpponent() {
     const healthStat = yourPokemon[0].stats[0].base_stat;
     console.log(healthStat);
 
+    //angrep
+    if(healthStat <= 0){
+        yourPokemon.shift();
+        sessionStorage.setItem("yourPokemon",JSON.stringify(yourPokemon))
+
+        if(yourPokemon.length < 2){
+            const yourPokemonNext = yourPokemon[0];
+            await showOpponentPokemon(yourPokemonNext);
+        }
+    }else{
+        
+
+    }
+
     await opponentsAttack()
   } catch (error) {
     console.error("opps noe gikk galt i attackOpponent", error);
@@ -250,9 +264,9 @@ async function opponentsAttack() {
         JSON.parse(sessionStorage.getItem("opponentsPokemon")) || [0];
         console.log(opponentsPokemon[0].stats[0].base_stat)
         const attackStatOpponent = opponentsPokemon[0].stats[1].base_stat;
-        console.log(attackStat)
+        console.log(attackStatOpponent)
         const healthStatOpponent = opponentsPokemon[0].stats[0].base_stat;
-        console.log(healthStat);
+        console.log(healthStatOpponent);
 
     }catch(error){
         console.error("opps noe gikk galt i opponentsAttack",error)
