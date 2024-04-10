@@ -136,10 +136,10 @@ async function showYourPokemon(index) {
 
     const display = displayYourPokemons(pokemon, pokemonCard);
 
-    const healthBarContainer = document.createElement("div");
+    const healthBarContainer = document.querySelector("#your-pokemon-healthbar");
     healthBarContainer.style.backgroundColor = "green";
     healthBarContainer.style.width = "500px";
-    updateHealth(healthBarContainer, pokemon);
+    //updateHealth(healthBarContainer, pokemon);
     healthBarContainer.style.height = "50px";
 
     pokemonCard.append(display, healthBarContainer);
@@ -166,10 +166,10 @@ async function showOpponentPokemon(index) {
     pokemonCard.classList.add("pokemon-card");
     pokemonCard.style.width = "300px";
 
-    const healthBarContainer = document.createElement("div");
+    const healthBarContainer = document.querySelector("#opponents-pokemons-healthbar")
     healthBarContainer.style.backgroundColor = "green";
     healthBarContainer.style.width = "500px";
-    updateHealth(healthBarContainer, pokemon);
+    //updateHealth(healthBarContainer, pokemon);
     healthBarContainer.style.height = "50px";
 
     const display = displayYourPokemons(pokemon, pokemonCard);
@@ -210,11 +210,15 @@ function displayYourPokemons(pokemon, pokemonCard) {
   );
 }
 
-function updateHealth(healthBarContainer, index){
-    console.log()
+function updateHealth(index){
+    console.log(index)
 
-    const pokemonNewHealth = `${index.stats[1].base_stat} -= ${SumHealthPx}`
+    const pokemonNewHealth = ` ${SumHealthPx} -= ${index.stats[1].base_stat}`
     const SumHealthPx = 500;
     healthBarContainer.style.width = "${pokemonNewHealth}-px";
 
 }
+
+//if(yourPokemon[0].health <= 0){
+
+//}
