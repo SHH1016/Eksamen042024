@@ -219,6 +219,10 @@ function updateHealth(index){
 
 }
 
+async function attackOpponent(){
+
+    
+}
 //if(yourPokemon[0].health <= 0){
 
 //}
