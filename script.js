@@ -41,6 +41,7 @@ async function fetchAllPokemon() {
       yourPokemon = setYourPokemon;
       opponentsPokemon = setOpponentsPokemon;
 
+      //spillet skal starte med indeks 0
       const yourPokemonObject1 = yourPokemon[0];
       const opponentsPokemonObject1 = opponentsPokemon[0];
 
@@ -64,7 +65,6 @@ async function fetchAllPokemon() {
             yourPokemon.push(randomPokemon);
             console.log(yourPokemon.length);
             sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
-
             //lagrer til sessionstorage
             //fikse så den kan hente inn nye pokemon på start og låse dem
           }
@@ -95,7 +95,6 @@ async function fetchAllPokemon() {
       pokemonSavedToSession = true;
       updatePokemons = false;
     }
-
     // while(!yourPokemon.length && !opponentsPokemon.length < 3){
     //satt den til når session storage har mottat 3 pokemons, skal den stoppe å oppdatere
   } catch (error) {
@@ -112,6 +111,7 @@ async function makeRandomIndex(maxIndexLength, pokeNumberIndexes) {
 
     while (randomPokeIndexes.length < pokeNumberIndexes) {
       const randomNumberIndex = Math.floor(Math.random() * maxIndexLength);
+      //samme index tall skal ikke pushes opp i randomPokeIndex
       if (!randomPokeIndexes.includes(randomNumberIndex)) {
         randomPokeIndexes.push(randomNumberIndex);
       }
@@ -137,14 +137,6 @@ async function showYourPokemon(index) {
     pokemonCard.style.width = "300px";
 
     const display = displayYourPokemons(pokemon, pokemonCard);
-    /*
-    const healthBarContainer = document.querySelector("#your-pokemon-healthbar");
-    healthBarContainer.style.backgroundColor = "green";
-    healthBarContainer.style.width = "500px";
-    //updateHealth(healthBarContainer, pokemon);
-    healthBarContainer.style.height = "50px";
-    */
-    const pokeHealth = 500;
 
     pokemonCard.append(display);
     yourPokemonContainer.appendChild(pokemonCard);
@@ -169,15 +161,6 @@ async function showOpponentPokemon(index) {
     const pokemonCard = document.createElement("div");
     pokemonCard.classList.add("pokemon-card");
     pokemonCard.style.width = "300px";
-
-    /*
-    const healthBarContainer = document.querySelector("#opponents-pokemons-healthbar")
-    healthBarContainer.style.backgroundColor = "green";
-    healthBarContainer.style.width = "500px";
-    //updateHealth(healthBarContainer, pokemon);
-    healthBarContainer.style.height = "50px";
-    */
-    const pokeHealth = 500;
 
     const display = displayYourPokemons(pokemon, pokemonCard);
 
@@ -212,8 +195,8 @@ function displayYourPokemons(pokemon, pokemonCard) {
 }
 
 attackBtn.addEventListener("click", function () {
-  opponentsAttack();
   attackOpponent();
+  opponentsAttack();
 });
 //Helsebaren for din pokemon og motstander sin pokemon
 const healthBarContainer1 = document.querySelector(
@@ -221,13 +204,11 @@ const healthBarContainer1 = document.querySelector(
 );
 healthBarContainer1.style.backgroundColor = "green";
 healthBarContainer1.style.width = "200px";
-//updateHealth(healthBarContainer, pokemon);
 healthBarContainer1.style.height = "50px";
 
 const healthBarContainer2 = document.querySelector("#your-pokemon-healthbar");
 healthBarContainer2.style.backgroundColor = "green";
 healthBarContainer2.style.width = "200px";
-//updateHealth(healthBarContainer, pokemon);
 healthBarContainer2.style.height = "50px";
 
 async function attackOpponent() {
@@ -252,17 +233,17 @@ async function attackOpponent() {
     let opponentsHealthWidth = parseInt(healthBarContainer1.style.width);
     console.log(opponentsHealthWidth + "px");
 
-    if (/*healthStat > 0 &&*/ opponentsHealthWidth > 0) {
+    if (opponentsHealthWidth > 0) {
       //healthbar motstander
       let newWidthHealth = (opponentsHealthWidth -= attackStat);
-      console.log(newWidthHealth +"px");
+      console.log("opponents pokemon health",newWidthHealth + "px");
       healthBarContainer1.style.width = newWidthHealth + "px";
-     
-      //neste angrep om ikke pokemon sin helse er under 0
-      let nextAttack = (newWidthHealth -= attackStat);
-      console.log(nextAttack);
 
-      if (/*newHealt <= 0*/ opponentsHealthWidth <= 0) {
+      //neste angrep om ikke pokemon sin helse er under eller 0
+      let nextAttack = (newWidthHealth -= attackStat);
+      console.log("opponents pokemon new health",nextAttack +"px");
+
+      if (opponentsHealthWidth <= 0) {
         opponentsPokemon.shift();
         sessionStorage.setItem(
           "opponentsPokemon",
@@ -280,13 +261,11 @@ async function attackOpponent() {
           fetchAllPokemon();
           //healthBarContainer1.style.width = "200px";
         }
-      } else if (/*newHealt > 1*/ opponentsHealthWidth > 1) {
+      } else if (opponentsHealthWidth > 1) {
         nextAttack;
         healthBarContainer1.style.width = nextAttack - "px";
       }
     }
-   
-   
   } catch (error) {
     console.error("opps noe gikk galt i attackOpponent", error);
   }
@@ -309,43 +288,39 @@ async function opponentsAttack() {
     console.log(healthStatOpponent);
 
     let yourHealthWidt = parseInt(healthBarContainer2.style.width);
-    console.log(yourHealthWidt+"px");
+    console.log(yourHealthWidt + "px");
 
-    if (/*healthStat > 0 &&*/ yourHealthWidt > 0) {
-        //healthbar
-        let newYourHealthWidth = (yourHealthWidt -= attackStatOpponent);
-        console.log(newYourHealthWidth+ "px");
-        healthBarContainer2.style.width = newYourHealthWidth + "px";
-  
-        //neste angrep om ikke pokemon sin helse er under 0
-        let yourNextAttack = (newYourHealthWidth -= attackStatOpponent);
-        console.log(yourNextAttack);
-  
-        if (/*newHealt <= 0*/ yourHealthWidt <= 0) {
-            yourPokemon.shift();
-          sessionStorage.setItem(
-            "yourPokemon",
-            JSON.stringify(yourPokemon)
-          );
-          console.log(yourPokemon);
-  
-          if (yourPokemon.length > 0) {
-            JSON.parse(sessionStorage.getItem("")) || [0];
-            const yourPokemonNext = yourPokemon[0];
-            await showYourPokemon(yourPokemonNext);
-            healthBarContainer2.style.width = "200px";
-          } else if (yourPokemon.length <= 0) {
-            alert("Dessverre ble det tap!");
-            fetchAllPokemon();
-            alert("refresh siden for å starte på nytt");
-            //healthBarContainer2.style.width = "200px";
-          }
-        } else if (/*newHealt > 1*/ yourHealthWidt > 1) {
-          yourNextAttack;
-          healthBarContainer2.style.width = yourNextAttack - "px";
+    if (yourHealthWidt > 0) {
+      //healthbar
+      let newYourHealthWidth = (yourHealthWidt -= attackStatOpponent);
+      console.log("your pokemon health",newYourHealthWidth + "px");
+      healthBarContainer2.style.width = newYourHealthWidth + "px";
+
+      //neste angrep om ikke pokemon sin helse ikke under eller 0
+      let yourNextAttack = (newYourHealthWidth -= attackStatOpponent);
+      console.log("your pokemon new health",yourNextAttack +"px");
+
+      if (yourHealthWidt <= 0) {
+        yourPokemon.shift();
+        sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
+        console.log(yourPokemon);
+
+        if (yourPokemon.length > 0) {
+          JSON.parse(sessionStorage.getItem("")) || [0];
+          const yourPokemonNext = yourPokemon[0];
+          await showYourPokemon(yourPokemonNext);
+          healthBarContainer2.style.width = "200px";
+        } else if (yourPokemon.length <= 0) {
+          alert("Dessverre ble det tap!");
+          fetchAllPokemon();
+          alert("refresh siden for å starte på nytt");
+          //healthBarContainer2.style.width = "200px";
         }
+      } else if (yourHealthWidt > 1) {
+        yourNextAttack;
+        healthBarContainer2.style.width = yourNextAttack - "px";
       }
-
+    }
   } catch (error) {
     console.error("opps noe gikk galt i yourAttack", error);
   }
