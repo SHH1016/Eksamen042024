@@ -329,13 +329,7 @@
           let selectedType = selectedTypeData[0].types[0].type.name;
           console.log(selectedType);
 
-          /*
-          const filteredPokemonType = pokemonData.filter((pokemon) => {
-            return pokemon.types[0].type.some((typePokemon) => {
-              return typePokemon.type.name === selectedType;
-            });
-          });
-          */
+    
          const filteredPokemonType = pokemonData.filter((pokemon)=>{
             let findPokemons = pokemon.types[0].type.name === selectedType;
             return findPokemons
@@ -352,8 +346,7 @@
               JSON.stringify(savedPokemons)
             );
             });
-            /*return pokemon.type.some((type) => {
-              return type.type.name === selectedType;*/
+           
           console.log(filterPokemonLocal);
 
           //display savedPokemon
