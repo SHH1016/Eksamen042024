@@ -232,7 +232,7 @@
 
           const newPokeName = prompt("Gi et nytt Navn");
           const newPokeType = prompt("Gi en ny Type");
-
+            //hente local storage og funnet index i localstorage og setItem 
           let indexOfPokemon = pokemonData.findIndex(
             (pokemon) => pokemon.name === index.name
           );
@@ -329,7 +329,7 @@
           let selectedType = selectedTypeData[0].types[0].type.name;
           console.log(selectedType);
 
-    
+          // Den henter fortsatt ut begge typene da pokemonene sine begge types er fetchet fra starten
          const filteredPokemonType = pokemonData.filter((pokemon)=>{
             let findPokemons = pokemon.types[0].type.name === selectedType;
             return findPokemons
