@@ -236,14 +236,14 @@ async function attackOpponent() {
     if (opponentsHealthWidth > 0) {
       //healthbar motstander
       let newWidthHealth = (opponentsHealthWidth -= attackStat);
-      console.log("opponents pokemon health",newWidthHealth + "px");
+     console.log("opponents pokemon health",newWidthHealth + "px");
       healthBarContainer1.style.width = newWidthHealth + "px";
 
       //neste angrep om ikke pokemon sin helse er under eller 0
       let nextAttack = (newWidthHealth -= attackStat);
-      console.log("opponents pokemon new health",nextAttack +"px");
+     
 
-      if (opponentsHealthWidth <= 0) {
+      if (opponentsHealthWidth <= 0 || opponentsHealthWidth < 0) {
         opponentsPokemon.shift();
         sessionStorage.setItem(
           "opponentsPokemon",
@@ -264,6 +264,7 @@ async function attackOpponent() {
       } else if (opponentsHealthWidth > 1) {
         nextAttack;
         healthBarContainer1.style.width = nextAttack - "px";
+        //console.log("opponents pokemon new health",nextAttack +"px");
       }
     }
   } catch (error) {
@@ -298,9 +299,9 @@ async function opponentsAttack() {
 
       //neste angrep om ikke pokemon sin helse ikke under eller 0
       let yourNextAttack = (newYourHealthWidth -= attackStatOpponent);
-      console.log("your pokemon new health",yourNextAttack +"px");
+     
 
-      if (yourHealthWidt <= 0) {
+      if (yourHealthWidt <= 0 || yourHealthWidt < 0) {
         yourPokemon.shift();
         sessionStorage.setItem("yourPokemon", JSON.stringify(yourPokemon));
         console.log(yourPokemon);
@@ -316,9 +317,10 @@ async function opponentsAttack() {
           alert("refresh siden for å starte på nytt");
           //healthBarContainer2.style.width = "200px";
         }
-      } else if (yourHealthWidt > 1) {
+      } else if (yourHealthWidt > 0) {
         yourNextAttack;
         healthBarContainer2.style.width = yourNextAttack - "px";
+       // console.log("your pokemon new health",yourNextAttack +"px");
       }
     }
   } catch (error) {
