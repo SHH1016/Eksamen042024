@@ -327,30 +327,39 @@
           console.log(selectedTypeData);
 
           let selectedType = selectedTypeData[0].types[0].type.name;
+          console.log(selectedType);
 
+          /*
           const filteredPokemonType = pokemonData.filter((pokemon) => {
-            return pokemon.types.some((type) => {
-              return type.type.name === selectedType;
+            return pokemon.types[0].type.some((typePokemon) => {
+              return typePokemon.type.name === selectedType;
             });
           });
+          */
+         const filteredPokemonType = pokemonData.filter((pokemon)=>{
+            let findPokemons = pokemon.types[0].type.name === selectedType;
+            return findPokemons
+         })
 
           //her må jeg hente inn localstorage sine pokemon også filtrere og displaye
           let savedPokemons =JSON.parse(localStorage.getItem("savedPokemons")) || [];
-
+            
           const filterPokemonLocal = savedPokemons.filter((pokemon) => {
-            return pokemon.types.some((type) => {
-              return type.type.name === selectedType;
-            });
+                let findPokemons = pokemon.types[0].type.name === selectedType;
+                return findPokemons;
             localStorage.setItem(
               "savedPokemons",
               JSON.stringify(savedPokemons)
             );
-          });
+            });
+            /*return pokemon.type.some((type) => {
+              return type.type.name === selectedType;*/
           console.log(filterPokemonLocal);
 
           //display savedPokemon
           displaySelectedType(filteredPokemonType, filterPokemonLocal);
 
+          console.log(filterPokemonLocal)
           console.log(filteredPokemonType);
           console.log(data);
           console.log(selectedTypeData);
